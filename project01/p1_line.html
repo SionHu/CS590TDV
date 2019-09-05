@@ -1,24 +1,116 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Xiao: p1_grouped</title>
-  </head>
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <title>Xiao: p1_line</title>
+</head>
 
-  <body>
-    <div class="container">
-      <h1>Hello, world!</h1>
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
 
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
 
-</html>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+d3.csv("old_cars.csv", function(error, old_data){
+  // Calculate average MPG for each Origin Each Year
+  var US_ave = [];
+  var Japan_ave = [];
+  var Europe_ave = [];
+
+  function average(list){
+    var sum = 0;
+    for( var i = 0; i < list.length; i++ ){
+      sum += parseInt( list[i], 10 ); //don't forget to add the base
+    }
+    var avg = sum/list.length;
+    return avg;
+  }
+
+  for (var i = 0; i < 13; i++) {
+    var curr = i + 70;
+    var US_model = [];
+    var Japan_model = [];
+    var Europe_model = [];
+
+    old_data.forEach(function(car){
+      if (car.Model == curr) {
+        if (car.Origin ==="US") {
+            US_model.push(car.MPG);
+        }else if (car.Origin === "Japan") {
+            Japan_model.push(car.MPG);
+        }else if (car.Origin === "Europe") {
+            Europe_model.push(car.MPG);
+        }
+      }
+    });
+    US_ave.push(
+      {
+          "data": "19".concat(curr.toString()),
+          "value": average(US_model)
+      },
+    );
+    Japan_ave.push(
+      {
+          "data": "19".concat((i+70).toString()),
+          "value": average(Japan_model)
+      },
+    );
+    Europe_ave.push(
+      {
+          "data": "19".concat((i+70).toString()),
+          "value": average(Europe_model)
+      },
+    );
+
+  } // End of for loop
+
+  console.log(US_ave, Japan_ave, Europe_ave);
+
+  // Add X axis --> it is a date format
+  var x = d3.scaleTime()
+    .domain(d3.extent(US_ave, function(d) { return d.date; }))
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, d3.max(US_ave, function(d) { return +d.value; })])
+    .range([ height, 0 ]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // Add the line
+  svg.append("path")
+    .datum(US_ave)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.date) })
+      .y(function(d) { return y(d.value) })
+      )
+
+
+}); // End of data import
+
+</script>
