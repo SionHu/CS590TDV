@@ -53,102 +53,9 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-    //import data from old_cars.csv
-    d3.csv("old_cars.csv", function(error, old_data) {
-      var US_count = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-      var Japan_count = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-      var Europe_count = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-
-      function where (sec, car) {
-        if (car.Origin === "US") {
-          US_count[sec]++;
-        }else if (car.Origin === "Japan") {
-          Japan_count[sec]++;
-        }else if (car.Origin === "Europe") {
-          Europe_count[sec]++;
-        }
-      }
-
-      old_data.forEach(function(car) {
-        if (car.MPG > 9 && car.MPG <= 13) {
-          var sec = 0;
-          where(sec, car);
-        }else if (car.MPG > 13 && car.MPG <= 15) {
-          var sec = 1;
-          where(sec, car);
-        }else if (car.MPG > 15 && car.MPG <= 17) {
-          var sec = 2;
-          where(sec, car);
-        }else if (car.MPG > 17 && car.MPG <= 19) {
-          var sec = 3;
-          where(sec, car);
-        }else if (car.MPG > 19 && car.MPG <= 21) {
-          var sec = 4;
-          where(sec, car);
-        }else if (car.MPG > 19 && car.MPG <= 21) {
-          var sec = 5;
-          where(sec, car);
-        }else if (car.MPG > 21 && car.MPG <= 23) {
-          var sec = 6;
-          where(sec, car);
-        }
-      });
-      console.log(US_count, Japan_count, Europe_count);
-
-      var data = [
-          {
-              "categorie": "one",
-              "values": [
-                  {
-                      "value": US_count[0],
-                      "rate": "US"
-                  },
-                  {
-                      "value": Japan_count[0],
-                      "rate": "Japan"
-                  },
-                  {
-                      "value": Europe_count[0],
-                      "rate": "Europe"
-                  }
-              ]
-          },
-          {
-              "categorie": "two",
-              "values": [
-                  {
-                      "value": US_count[1],
-                      "rate": "US"
-                  },
-                  {
-                      "value": Japan_count[1],
-                      "rate": "Japan"
-                  },
-                  {
-                      "value": Europe_count[1],
-                      "rate": "Europe"
-                  }
-              ]
-          },
-          {
-              "categorie": "three",
-              "values": [
-                  {
-                      "value": US_count[2],
-                      "rate": "US"
-                  },
-                  {
-                      "value": Japan_count[2],
-                      "rate": "Japan"
-                  },
-                  {
-                      "value": Europe_count[2],
-                      "rate": "Europe"
-                  }
-              ]
-          }
-      ]
-
+    // Impoet data
+    d3.json("test.json", function(error, data) {
+      console.log(data);
       var categoriesNames = data.map(function(d) { return d.categorie; });
       var rateNames = data[0].values.map(function(d) { return d.rate; });
 
@@ -229,5 +136,4 @@
     });
 
   </script>
-
 </body>
