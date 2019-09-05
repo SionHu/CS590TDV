@@ -70,84 +70,39 @@
       }
 
       old_data.forEach(function(car) {
-        if (car.MPG > 9 && car.MPG <= 13) {
-          var sec = 0;
-          where(sec, car);
-        }else if (car.MPG > 13 && car.MPG <= 15) {
-          var sec = 1;
-          where(sec, car);
-        }else if (car.MPG > 15 && car.MPG <= 17) {
-          var sec = 2;
-          where(sec, car);
-        }else if (car.MPG > 17 && car.MPG <= 19) {
-          var sec = 3;
-          where(sec, car);
-        }else if (car.MPG > 19 && car.MPG <= 21) {
-          var sec = 4;
-          where(sec, car);
-        }else if (car.MPG > 19 && car.MPG <= 21) {
-          var sec = 5;
-          where(sec, car);
-        }else if (car.MPG > 21 && car.MPG <= 23) {
-          var sec = 6;
-          where(sec, car);
+        for (var k = 0; k < 18; k++) {
+          if (car.MPG > 9+2*k && car.MPG <= 9+2*k+2) {
+            var sec = k;
+            where(sec, car);
+          }
         }
       });
       console.log(US_count, Japan_count, Europe_count);
 
-      var data = [
+      // Store data into the array
+      var data = [];
+      for (var i = 0; i < 18; i++) {
+        var sec_name = (9+2*i).toString().concat("~").concat((9+2*i+2).toString());
+        data.push(
           {
-              "categorie": "one",
-              "values": [
-                  {
-                      "value": US_count[0],
-                      "rate": "US"
-                  },
-                  {
-                      "value": Japan_count[0],
-                      "rate": "Japan"
-                  },
-                  {
-                      "value": Europe_count[0],
-                      "rate": "Europe"
-                  }
-              ]
-          },
-          {
-              "categorie": "two",
-              "values": [
-                  {
-                      "value": US_count[1],
-                      "rate": "US"
-                  },
-                  {
-                      "value": Japan_count[1],
-                      "rate": "Japan"
-                  },
-                  {
-                      "value": Europe_count[1],
-                      "rate": "Europe"
-                  }
-              ]
-          },
-          {
-              "categorie": "three",
-              "values": [
-                  {
-                      "value": US_count[2],
-                      "rate": "US"
-                  },
-                  {
-                      "value": Japan_count[2],
-                      "rate": "Japan"
-                  },
-                  {
-                      "value": Europe_count[2],
-                      "rate": "Europe"
-                  }
-              ]
+            "categorie": sec_name,
+            "values": [
+              {
+                "value": US_count[i],
+                "rate": "US"
+              },
+              {
+                "value": Japan_count[i],
+                "rate": "Japan"
+              },
+              {
+                "value": Europe_count[i],
+                "rate": "Europe"
+              }
+            ]
           }
-      ]
+        );
+      }
 
       var categoriesNames = data.map(function(d) { return d.categorie; });
       var rateNames = data[0].values.map(function(d) { return d.rate; });
@@ -159,7 +114,14 @@
       svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
+          .call(xAxis)
+
+      svg.append("text")
+          .attr("x", width/2)
+          .attr("y", height+30)
+          .style("text-anchor", "middle")
+          .style("font-weight", "bold")
+          .text("MPG");
 
       svg.append("g")
           .attr("class", "y axis")
