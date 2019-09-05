@@ -82,9 +82,10 @@
       // Store data into the array
       var data = [];
       for (var i = 0; i < 18; i++) {
+        var sec_name = (9+2*i).toString().concat("~").concat((9+2*i+2).toString());
         data.push(
           {
-            "categorie": 9+2*i,
+            "categorie": sec_name,
             "values": [
               {
                 "value": US_count[i],
@@ -113,7 +114,14 @@
       svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
+          .call(xAxis)
+
+      svg.append("text")
+          .attr("x", width/2)
+          .attr("y", height+30)
+          .style("text-anchor", "middle")
+          .style("font-weight", "bold")
+          .text("MPG");
 
       svg.append("g")
           .attr("class", "y axis")
