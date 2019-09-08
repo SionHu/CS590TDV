@@ -15,9 +15,9 @@
 <script>
 
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
@@ -63,19 +63,20 @@ d3.csv("old_cars.csv", function(error, old_data){
     });
     US_ave.push(
       {
-          "data": "19".concat(curr.toString()),
+          // "date": parseInt("19".concat(curr.toString()), 10),
+          "date": "19".concat(curr.toString()),
           "value": average(US_model)
       },
     );
     Japan_ave.push(
       {
-          "data": "19".concat((i+70).toString()),
+          "date": "19".concat((i+70).toString()),
           "value": average(Japan_model)
       },
     );
     Europe_ave.push(
       {
-          "data": "19".concat((i+70).toString()),
+          "date": "19".concat((i+70).toString()),
           "value": average(Europe_model)
       },
     );
@@ -84,9 +85,9 @@ d3.csv("old_cars.csv", function(error, old_data){
 
   console.log(US_ave, Japan_ave, Europe_ave);
 
-  // Add X axis --> it is a date format
-  var x = d3.scaleTime()
-    .domain(d3.extent(US_ave, function(d) { return d.date; }))
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain(d3.extent(Europe_ave, function(d) { return d.date; }))
     .range([ 0, width ]);
   svg.append("g")
     .attr("transform", "translate(0," + height + ")")
@@ -94,7 +95,7 @@ d3.csv("old_cars.csv", function(error, old_data){
 
   // Add Y axis
   var y = d3.scaleLinear()
-    .domain([0, d3.max(US_ave, function(d) { return +d.value; })])
+    .domain([0, d3.max(Europe_ave, function(d) { return +d.value; })])
     .range([ height, 0 ]);
   svg.append("g")
     .call(d3.axisLeft(y));
@@ -103,13 +104,50 @@ d3.csv("old_cars.csv", function(error, old_data){
   svg.append("path")
     .datum(US_ave)
     .attr("fill", "none")
+    .attr("stroke", "red")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.date) })
+      .y(function(d) { return y(d.value) })
+      )
+  svg.append("text")
+     .attr("x", 100)  // space legend
+     .attr("y", height + (margin.bottom/2)-180)
+     .attr("class", "legend")    // style the legend
+     .style("fill", "red")
+     .text("US");
+
+  svg.append("path")
+    .datum(Japan_ave)
+    .attr("fill", "none")
     .attr("stroke", "steelblue")
     .attr("stroke-width", 1.5)
     .attr("d", d3.line()
       .x(function(d) { return x(d.date) })
       .y(function(d) { return y(d.value) })
       )
+  svg.append("text")
+     .attr("x", 100)  // space legend
+     .attr("y", height + (margin.bottom/2)-350)
+     .attr("class", "legend")    // style the legend
+     .style("fill", "steelblue")
+     .text("Japan");
 
+  svg.append("path")
+    .datum(Europe_ave)
+    .attr("fill", "none")
+    .attr("stroke", "green")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.date) })
+      .y(function(d) { return y(d.value) })
+      )
+  svg.append("text")
+     .attr("x", 100)  // space legend
+     .attr("y", 220)
+     .attr("class", "legend")    // style the legend
+     .style("fill", "green")
+     .text("Europe");
 
 }); // End of data import
 
