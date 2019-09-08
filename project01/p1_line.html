@@ -100,6 +100,8 @@ d3.csv("old_cars.csv", function(error, old_data){
   svg.append("g")
     .call(d3.axisLeft(y));
 
+
+  svg.select('.y').transition().duration(500).delay(1300).style('opacity','1');
   // Add the line
   svg.append("path")
     .datum(US_ave)
@@ -115,6 +117,7 @@ d3.csv("old_cars.csv", function(error, old_data){
      .attr("y", height + (margin.bottom/2)-180)
      .attr("class", "legend")    // style the legend
      .style("fill", "red")
+     .style("font-weight", "bold")
      .text("US");
 
   svg.append("path")
@@ -131,6 +134,7 @@ d3.csv("old_cars.csv", function(error, old_data){
      .attr("y", height + (margin.bottom/2)-350)
      .attr("class", "legend")    // style the legend
      .style("fill", "steelblue")
+     .style("font-weight", "bold")
      .text("Japan");
 
   svg.append("path")
@@ -147,7 +151,23 @@ d3.csv("old_cars.csv", function(error, old_data){
      .attr("y", 220)
      .attr("class", "legend")    // style the legend
      .style("fill", "green")
+     .style("font-weight", "bold")
      .text("Europe");
+
+ svg.append("text")
+     .attr("x", width/2)
+     .attr("y", height+30)
+     .style("text-anchor", "middle")
+     .style("font-weight", "bold")
+     .text("Year");
+
+     svg.append("text")
+         .attr("transform", "rotate(-90)")
+         .attr("y", 6)
+         .attr("dy", ".71em")
+         .style("text-anchor", "end")
+         .style('font-weight','bold')
+         .text("Average MPG");
 
 }); // End of data import
 

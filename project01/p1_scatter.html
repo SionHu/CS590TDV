@@ -1,24 +1,114 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Xiao: p1_grouped</title>
-  </head>
+<!DOCTYPE html>
+<meta charset="utf-8">
 
-  <body>
-    <div class="container">
-      <h1>Hello, world!</h1>
+<style media="screen">
+body {
+  font: sans-serif;
+}
+</style>
 
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
+<head>
+  <link rel="shortcut icon" href="#">
+</head>
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
 
-</html>
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 20, right: 50, bottom: 50, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+d3.csv("old_cars.csv", function(old_data) {
+  // console.log(old_data);
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0, 240])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([9, 50])
+    .range([ height, 0]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  var years = []
+  for (var i = 0; i < 13; i++) {
+    years[i] = i;
+  }
+  // console.log(years);
+
+  // Choose 13 random colors
+  var store = [];
+  var years = [];
+  var random_color = d3.scaleOrdinal(d3.schemeCategory20); // such a shame it doens't work on v4
+
+  for (var i = 0; i < 13; i++) {
+    store.push(random_color(i));
+    years.push((70+i).toString());
+  }
+  // console.log(store);
+
+  var color = d3.scaleLinear()
+    .domain(years)
+    .range(store);
+
+  // Add dots
+  svg.append('g')
+    .selectAll("dot")
+    .data(old_data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return x(d.Horsepower); } )
+      .attr("cy", function (d) { return y(d.MPG); } )
+      .attr("r", 5)
+      .style("fill", function (d) { return color(d.Model) } )
+
+   // Add axis titles
+  svg.append("text")
+    .attr("x", width/2)
+    .attr("y", height+30)
+    .style("text-anchor", "middle")
+    .style("font-weight", "bold")
+    .text("Hoursepower");
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .style('font-weight','bold')
+    .text("MPG");
+
+  // Color indicator
+  for (var i = 0; i < 13; i++) {
+    svg.append("text")
+    .attr("x", width-50)
+    .attr("y", height-height*9/10+20*i)
+    .attr("fill", store[i])
+    .style("font-family", "sans-serif")
+    .style("font-weight", "bold")
+    .text("19"+years[i].toString());
+
+  }
+
+})
+
+</script>
