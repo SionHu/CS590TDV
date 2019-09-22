@@ -42,6 +42,7 @@ var svg = d3.select("#my_dataviz")
 
 //Read the data
 d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/4_ThreeNum.csv", function(data) {
+  console.log(data[0].continent);
 
   // ---------------------------//
   //       AXIS  AND SCALE      //
