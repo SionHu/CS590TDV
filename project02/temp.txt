@@ -1,0 +1,4 @@
+// console.log(d[0][' Birth rate']);
+// console.log(d[0]['  GDP per capita ']);
+// console.log(d[0][' Life expectancy at birth']);
+// console.log(d[0]['  Population ']);
