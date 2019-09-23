@@ -72,14 +72,46 @@ d3.csv("factbook.csv", function(error, data) {
     d.gdp_per_cap = parseFloat(d['  GDP per capita '].replace('$','').replace(',',''));
     d.life_exp_at_b = parseFloat(d[' Life expectancy at birth']);
     d.population = parseInt(d['  Population '].replace(',', ''));
-    // for testing
-    d.area = d[' Area'];
+    d.investment = parseFloat(d[' Investment']);
+    // check which continent the counrty is from
+    var country = d['Country'];
+    var africa = ["Cameroon","Nigeria","Egypt","Ethiopia","South Africa","Tanzania","Kenya"
+    ,"Morocco","Algeria","Uganda","Ghana","Mozambique","Madagascar","Cote d'Ivoire","Burkina Faso"
+    ,"Zimbabwe","Malawi","Zambia","Angola","Senegal","Tunisia","Chad","Guinea","Rwanda","Burundi"
+    ,"Togo","Eritrea","Congo Republic of the","Namibia","Lesotho","Botswana","Gambia The","Gabon"
+    ,"Mauritius","Swaziland","Trinidad and Tobago","Equatorial Guinea","Cape Verde","Sao Tome and Principe","Seychelles"
+    ,"Benin"];
+    var asia = ["China","India","Indonesia","Pakistan","Bangladesh","Russia","Japan","Philippines"
+    ,"Vietnam","Iran","Thailand","Korea South","Burma","Sudan","Uzbekistan","Saudi Arabia","Iraq"
+    ,"Malaysia","Taiwan","Yemen","Sri Lanka","Syria","Kazakhstan","Cambodia","Azerbaijan","Tajikistan"
+    ,"Hong Kong","Israel","Laos","Kyrgyzstan","Turkmenistan","Singapore","Oman","Armenia","United Arab Emirates"
+    ,"Kuwait","Qatar","Cyprus","Bahrain"];
+    var austrlia = ["Australia","New Zealand","Papua New Guinea"];
+    var europe = ["Germany","Turkey","France","United Kingdom","Italy","Ukraine","Spain","Poland","Romania","Netherlands"
+    ,"Greece","Portugal","Belgium","Belarus","Czech Republic","Hungary","Sweden","Austria","Switzerland","Bulgaria"
+    ,"Denmark","Slovakia","Finland","Norway","Croatia","Moldova","Ireland","Lebanon","Lithuania","Albania","Latvia","Macedonia"
+    ,"Slovenia","Estonia","Malta","Iceland","Serbia and Montenegro","Bosnia and Herzegovina"];
+    var north_america = ["Canada","Haiti","Libya","Nicaragua","Georgia","Jamaica","Belize","United States"];
+    var south_america = ["Brazil","Mexico","Colombia","Argentina","Peru","Venezuela","Chile","Guatemala","Ecuador","Cuba"
+    ,"Dominican Republic","Bolivia","Honduras","El Salvador","Paraguay","Jordan","Costa Rica","Uruguay","Panama","Guyana"];
+    if (africa.includes(country)) {
+      d.continent = "africa";
+    }else if (asia.includes(country)) {
+      d.continent = "asia";
+    }else if (austrlia.includes(country)) {
+      d.continent = "austrlia";
+    }else if (europe.includes(country)) {
+      d.continent = "europe";
+    }else if (north_america.includes(country)) {
+      d.continent = "north_america";
+    }else if (south_america.includes(country)) {
+      d.continent = "south_america";
+    }
   });
 
   // ---------------------------//
   //      TOOLTIP               //
   // ---------------------------//
-
   // -1- Create a tooltip div that is hidden by default:
   var tooltip = d3.select("#my_dataviz")
     .append("div")
@@ -135,9 +167,10 @@ d3.csv("factbook.csv", function(error, data) {
   //////// dropdown list ///////
   // ---------------------------
   var group = ["GDP per capita", "Life expectancy at birth", "Population", "all", 2]; // initial graph
-  var attr_group = ["GDP per capita", "Life expectancy at birth", "Population"];
-  var color_group = ["0-10", "10-20", "20-30", "30-40", "40-50"]
-  var options = ["","",""];
+  var attr_group = ["GDP per capita", "Life expectancy at birth", "Population", "Investment"];
+  var color_group = ["0-10", "10-20", "20-30", "30-40", "40-50", "all"]
+  var color_group2 = ["africa","asia","austrlia","europe","south_america","north_america"];
+  var options = ["","","","",""];
   update(group);
   // add the options to the button
   d3.selectAll("#selectx, #selecty, #selectRadius")
@@ -150,7 +183,7 @@ d3.csv("factbook.csv", function(error, data) {
 
   d3.select("#selectColor")
     .selectAll('myOptions')
-    .data(color_group)
+    .data(color_group.concat(color_group2))
     .enter()
     .append('option')
     .text(function (d) { return d; }) // text showed in the menu
@@ -159,7 +192,6 @@ d3.csv("factbook.csv", function(error, data) {
   // When the button is changed, run the updateChart function
   d3.selectAll("#selectx, #selecty, #selectRadius, #selectColor, #mySlider").on("change", function(d) {
     // remove previous drawing
-    // svg.selectAll("g").selectAll("circle").remove();
     svg.selectAll("*").remove();
     // recover the option that has been chosen
     options[0] = d3.select("#selectx").property("value");
@@ -179,25 +211,21 @@ d3.csv("factbook.csv", function(error, data) {
       return d.life_exp_at_b;
     }else if (option == "Population") {
       return d.population;
+    }else if (option == "Investment") {
+      return d.investment;
     }
   }
   function map_domain(option){
     if (option == "Birth rate") {
-      var domain1 = [0, 50];
-      var group1 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
-      return [domain1, group1];
+      return [0, 50];
     }else if (option == "GDP per capita") {
-      var domain2 = [0, 45000];
-      var group2 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
-      return [domain2, group2];
+      return [0, 45000];
     }else if (option == "Life expectancy at birth") {
-      var domain3 = [20, 90];
-      var group3 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
-      return [domain3, group3];
+      return [20, 90];
     }else if (option == "Population") {
-      var domain4 = [50000, 1400000000];
-      var group4 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
-      return [domain4, group4];
+      return [50000, 1400000000];
+    }else if (option == "Investment") {
+      return [0, 70];
     }
   }
   function map_color(option){
@@ -211,17 +239,28 @@ d3.csv("factbook.csv", function(error, data) {
       return data.filter(function(d){return d.birth_rate=="30-40";})
     }else if(option == "all"){
       return data;
+    }else if(option == "asia"){
+      return data.filter(function(d){return d.continent=="asia";})
+    }else if(option == "africa"){
+      return data.filter(function(d){return d.continent=="africa";})
+    }else if(option == "austrlia"){
+      return data.filter(function(d){return d.continent=="austrlia";})
+    }else if(option == "europe"){
+      return data.filter(function(d){return d.continent=="europe";})
+    }else if(option == "north_america"){
+      return data.filter(function(d){return d.continent=="north_america";})
+    }else if(option == "south_america"){
+      return data.filter(function(d){return d.continent=="south_america";})
     }
   }
   // update the graph accordingly
   function update(options){
-    console.log(map_color(options[3]));
     // ---------------------------//
     //       AXIS  AND SCALE      //
     // ---------------------------//
     // Add X axis
     var x = d3.scaleLinear()
-      .domain(map_domain(options[0])[0])
+      .domain(map_domain(options[0]))
       .range([ 0, width ]);
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -229,7 +268,7 @@ d3.csv("factbook.csv", function(error, data) {
 
     // Add Y axis
     var y = d3.scaleLinear()
-      .domain(map_domain(options[1])[0])
+      .domain(map_domain(options[1]))
       .range([ height, 0]);
     svg.append("g")
       .call(d3.axisLeft(y));
@@ -250,15 +289,21 @@ d3.csv("factbook.csv", function(error, data) {
         .attr("text-anchor", "start")
 
     // Add a scale for bubble size
-    console.log(options[4]*0.5);
     var z = d3.scaleSqrt()
       .domain([1000*options[4], 1000000*options[4]])
       .range([3, 30]);
 
+    if (color_group.includes(options[3])) {
+      var myColor = d3.scaleOrdinal()
+        .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
+        .range(d3.schemeSet1);
+    }else {
+      var myColor = d3.scaleOrdinal()
+        .domain(["africa","asia","austrlia","europe","south_america","north_america"])
+        .range(d3.schemeSet1);
+    }
     // Add a scale for bubble color
-    var myColor = d3.scaleOrdinal()
-      .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
-      .range(d3.schemeSet1);
+
     // ---------------------------//
     //       CIRCLES              //
     // ---------------------------//
@@ -269,11 +314,17 @@ d3.csv("factbook.csv", function(error, data) {
     .data(real_data)
     .enter()
     .append("circle")
-    .attr("class", function(d) { return "bubbles " + d.birth_rate })
+    .attr("class", function(d) {
+      if (color_group.includes(options[3])) { return "bubbles " + d.birth_rate }
+      else { return "bubbles " + d.continent; }
+    })
     .attr("cx", function(d){ return x(map(options[0], d)); })
     .attr("cy", function (d) { return y(map(options[1], d)); } )
     .attr("r", function (d) { return z(map(options[2], d)); } )
-    .style("fill", function (d) { return myColor(d.birth_rate); } )
+    .style("fill", function (d) {
+      if (color_group.includes(options[3])) { return myColor(d.birth_rate); }
+      else { return myColor(d.continent); }
+    })
 
     // -3- Trigger the functions for hover
     .on("mouseover", showTooltip )
@@ -331,9 +382,15 @@ d3.csv("factbook.csv", function(error, data) {
       .attr("text-anchor", "middle")
 
     // Add one dot in the legend for each name.
-    var size = 20
+    var size = 20;
+    var color_list = [];
+    if (color_group.includes(options[3])) {
+      color_list = color_group.slice(0,5);
+    }else {
+      color_list = color_group2;
+    }
     svg.selectAll("myrect")
-      .data(color_group)
+      .data(color_list)
       .enter()
       .append("circle")
         .attr("cx", 690)
@@ -345,7 +402,7 @@ d3.csv("factbook.csv", function(error, data) {
 
     // Add labels beside legend dots
     svg.selectAll("mylabels")
-      .data(color_group)
+      .data(color_list)
       .enter()
       .append("text")
         .attr("x", 690 + size*.8)
@@ -354,7 +411,8 @@ d3.csv("factbook.csv", function(error, data) {
         .text(function(d){ return d})
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
-        .on("mouseover", highlight)
+        .on("mouseover", highlight);
+
   } // end of function
 
 }); // end of input data
