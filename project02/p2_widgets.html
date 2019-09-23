@@ -5,6 +5,7 @@
   <title>Xiao: p2_bubbles</title>
 </head>
 <meta charset="utf-8">
+
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
 
@@ -12,32 +13,32 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
 <!-- Add a dropdown list -->
-<select id="selectButton"></select>
-
-<!-- Add a slider -->
-<input type="range" name="mySlider" id=mySlider min="1" max="3" default="2">
+<b>x:</b><select id="selectx"></select>
+<b>y:</b><select id="selecty"></select>
+<b>radius:</b><select id="selectRadius"></select>
+<b>color:</b><select id="selectColor"></select>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
-
 <!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
 <style>
-  .bubbles {
-    stroke-width: 1px;
-    stroke: black;
-    opacity: .8
-  }
-  .bubbles:hover {
-    stroke: black;
+.bubbles {
+  stroke-width: 1px;
+  stroke: black;
+  opacity: .8
+}
+.bubbles:hover {
+  stroke: black;
 }
 </style>
+
 
 <script>
 
 // set the dimensions and margins of the graph
-var margin = {top: 40, right: 150, bottom: 60, left: 30},
-    width = 800 - margin.left - margin.right,
+var margin = {top: 40, right: 150, bottom: 60, left: 40},
+    width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -52,28 +53,18 @@ var svg = d3.select("#my_dataviz")
 //Read the data
 d3.csv("factbook.csv", function(error, data) {
   // rename the header name
-  var data1 = [];
-  var data2 = [];
-  var data3 = [];
-  var data4 = [];
-  var data5 = [];
   data.forEach(function(d){
     var brate = parseFloat(d[' Birth rate']);
     if (brate <= 10) {
       d.birth_rate = "0-10";
-      data1.push(d);
     }else if (10 < brate && brate <= 20) {
       d.birth_rate = "10-20";
-      data2.push(d);
     }else if (20 < brate && brate <= 30) {
       d.birth_rate = "20-30";
-      data3.push(d);
     }else if (30 < brate && brate <= 40) {
       d.birth_rate = "30-40";
-      data4.push(d);
     }else {
       d.birth_rate = "40-50";
-      data5.push(d);
     };
     d.gdp_per_cap = parseFloat(d['  GDP per capita '].replace('$','').replace(',',''));
     d.life_exp_at_b = parseFloat(d[' Life expectancy at birth']);
@@ -82,191 +73,212 @@ d3.csv("factbook.csv", function(error, data) {
     d.area = d[' Area'];
   });
 
-  // List of groups
-  var allGroup = ["0-10", "10-20", "20-30", "30-40", "40-50", "all"]
+  // ---------------------------//
+  //      TOOLTIP               //
+  // ---------------------------//
 
+  // -1- Create a tooltip div that is hidden by default:
+  var tooltip = d3.select("#my_dataviz")
+    .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "black")
+      .style("border-radius", "5px")
+      .style("padding", "10px")
+      .style("color", "white")
+
+  // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+  var showTooltip = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+    tooltip
+      .style("opacity", 1)
+      .html("Birth rate: " + d[' Birth rate'])
+      .style("left", (d3.mouse(this)[0]+30) + "px")
+      .style("top", (d3.mouse(this)[1]+30) + "px")
+  }
+  var moveTooltip = function(d) {
+    tooltip
+      .style("left", (d3.mouse(this)[0]+30) + "px")
+      .style("top", (d3.mouse(this)[1]+30) + "px")
+  }
+  var hideTooltip = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0)
+  }
+
+
+  // ---------------------------//
+  //       HIGHLIGHT GROUP      //
+  // ---------------------------//
+
+  // What to do when one group is hovered
+  var highlight = function(d){
+    // reduce opacity of all groups
+    d3.selectAll(".bubbles").style("opacity", .05)
+    // expect the one that is hovered
+    d3.selectAll("."+d).style("opacity", 1)
+  }
+
+  // And when it is not hovered anymore
+  var noHighlight = function(d){
+    d3.selectAll(".bubbles").style("opacity", 1)
+  }
+
+  // ---------------------------
+  //////// dropdown list ///////
+  // ---------------------------
+  var group = ["GDP per capita", "Life expectancy at birth", "Population", "all"];
+  var color_group = ["0-10", "10-20", "20-30", "30-40", "40-50"]
+  var options = ["","",""];
+  update(group);
   // add the options to the button
-  d3.select("#selectButton")
+  d3.selectAll("#selectx, #selecty, #selectRadius")
     .selectAll('myOptions')
-   	.data(allGroup)
+    .data(group)
     .enter()
-  	.append('option')
+    .append('option')
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
-  update("all"); // set as default graph
-
+  d3.select("#selectColor")
+    .selectAll('myOptions')
+    .data(color_group)
+    .enter()
+    .append('option')
+    .text(function (d) { return d; }) // text showed in the menu
+    .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
   // When the button is changed, run the updateChart function
-  d3.select("#selectButton").on("change", function(d) {
-      // recover the option that has been chosen
-      var selectedOption = d3.select(this).property("value")
-      // run the updateChart function with this selected option
-      update(selectedOption)
+  d3.selectAll("#selectx, #selecty, #selectRadius, #selectColor").on("change", function(d) {
+    // remove previous drawing
+    // svg.selectAll("g").selectAll("circle").remove();
+    svg.selectAll("*").remove();
+    // recover the option that has been chosen
+    options[0] = d3.select("#selectx").property("value");
+    options[1] = d3.select("#selecty").property("value");
+    options[2] = d3.select("#selectRadius").property("value");
+    options[3] = d3.select("#selectColor").property("value");
+    update(options);
   })
 
-  // Listen to the slider?
-  d3.select("#mySlider").on("change", function(d){
-    var selectedValue = this.value;
-    update(selectedValue);
-  })
-
-  // A function that update the chart
-  function update(selectedGroup) {
-    var real_data = [];
-    var index = 1;
-    if (selectedGroup == "0-10") {
-      real_data = data1;
-    }else if (selectedGroup == "10-20") {
-      real_data = data2;
-    }else if (selectedGroup == "20-30") {
-      real_data = data3;
-    }else if (selectedGroup == "30-40") {
-      real_data = data4;
-    }else if (selectedGroup == "40-50"){
-      real_data = data5;
-    }else if (selectedGroup == "all" ){
-      real_data = data;
-      index = 1;
-    }else{
-      // index for changing the area of circles
-      index = selectedGroup * 0.5;
+  function map(option, d){
+    if (option == "Birth rate") {
+      return d.birth_rate;
+    }else if (option == "GDP per capita") {
+      return d.gdp_per_cap;
+    }else if (option == "Life expectancy at birth") {
+      return d.life_exp_at_b;
+    }else if (option == "Population") {
+      return d.population;
     }
-
-    if (isNaN(selectedGroup)) {
-      // remove all the precious circles
-      svg.selectAll("g").selectAll("circle").remove();
-    }else {
-      svg.selectAll("legend").remove();
+  }
+  function map_domain(option){
+    if (option == "Birth rate") {
+      var domain1 = [0, 50];
+      var group1 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
+      return [domain1, group1];
+    }else if (option == "GDP per capita") {
+      var domain2 = [0, 45000];
+      var group2 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
+      return [domain2, group2];
+    }else if (option == "Life expectancy at birth") {
+      var domain3 = [20, 90];
+      var group3 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
+      return [domain3, group3];
+    }else if (option == "Population") {
+      var domain4 = [50000, 1400000000];
+      var group4 = ["0-10", "10-20", "20-30", "30-40", "40-50"];
+      return [domain4, group4];
     }
-
-    console.log(index);
-
+  }
+  function map_color(option){
+    if (option == "0-10") {
+      return data.filter(function(d){return d.birth_rate=="0-10";})
+    }else if(option == "10-20"){
+      return data.filter(function(d){return d.birth_rate=="10-20";})
+    }else if(option == "20-30"){
+      return data.filter(function(d){return d.birth_rate=="20-30";})
+    }else if(option == "30-40"){
+      return data.filter(function(d){return d.birth_rate=="30-40";})
+    }else if(option == "all"){
+      return data;
+    }
+  }
+  // update the graph accordingly
+  function update(options){
+    console.log(map_color(options[3]));
     // ---------------------------//
     //       AXIS  AND SCALE      //
     // ---------------------------//
-
     // Add X axis
     var x = d3.scaleLinear()
-      .domain([0, 45000])
+      .domain(map_domain(options[0])[0])
       .range([ 0, width ]);
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).ticks(3));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain(map_domain(options[1])[0])
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
 
     // Add X axis label:
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("x", width)
         .attr("y", height+50 )
-        .text("GDP per Capita");
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([20, 90])
-      .range([ height, 0]);
-    svg.append("g")
-      .call(d3.axisLeft(y));
+        .text(options[0]);
 
     // Add Y axis label:
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("x", 0)
         .attr("y", -20 )
-        .text("Life Expectancy")
+        .text(options[1])
         .attr("text-anchor", "start")
 
     // Add a scale for bubble size
     var z = d3.scaleSqrt()
       .domain([1000, 1000000])
-      .range([1, 30]);
+      .range([3, 30]);
 
     // Add a scale for bubble color
     var myColor = d3.scaleOrdinal()
       .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
       .range(d3.schemeSet1);
-
-      // ---------------------------//
-      //       CIRCLES              //
-      // ---------------------------//
-
-      // Add dots
-      svg.append('g')
-      .selectAll("dot")
-      .data(real_data)
-      .enter()
-      .append("circle")
-      .attr("class", function(d) { return "bubbles " + d.birth_rate })
-      .attr("cx", function (d) { return x(d.gdp_per_cap); } )
-      .attr("cy", function (d) { return y(d.life_exp_at_b); } )
-      .attr("r", function (d) { return z(d.population); } )
-      .style("fill", function (d) { return myColor(d.birth_rate); } )
-
-      // -3- Trigger the functions for hover
-      .on("mouseover", showTooltip )
-      .on("mousemove", moveTooltip )
-      .on("mouseleave", hideTooltip )
-
     // ---------------------------//
-    //      TOOLTIP               //
+    //       CIRCLES              //
     // ---------------------------//
+    var real_data = map_color(options[3]);
+    // Add dots
+    svg.append('g')
+    .selectAll("dot")
+    .data(real_data)
+    .enter()
+    .append("circle")
+    .attr("class", function(d) { return "bubbles " + d.birth_rate })
+    .attr("cx", function(d){ return x(map(options[0], d)); })
+    .attr("cy", function (d) { return y(map(options[1], d)); } )
+    .attr("r", function (d) { return z(map(options[2], d)); } )
+    .style("fill", function (d) { return myColor(d.birth_rate); } )
 
-    // -1- Create a tooltip div that is hidden by default:
-    var tooltip = d3.select("#my_dataviz")
-      .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "black")
-        .style("border-radius", "5px")
-        .style("padding", "10px")
-        .style("color", "white")
-
-    // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
-    var showTooltip = function(d) {
-      tooltip
-        .transition()
-        .duration(200)
-      tooltip
-        .style("opacity", 1)
-        .html("Birth rate: " + d[' Birth rate'])
-        .style("left", (d3.mouse(this)[0]+30) + "px")
-        .style("top", (d3.mouse(this)[1]+30) + "px")
-    }
-    var moveTooltip = function(d) {
-      tooltip
-        .style("left", (d3.mouse(this)[0]+30) + "px")
-        .style("top", (d3.mouse(this)[1]+30) + "px")
-    }
-    var hideTooltip = function(d) {
-      tooltip
-        .transition()
-        .duration(200)
-        .style("opacity", 0)
-    }
-
-
-    // ---------------------------//
-    //       HIGHLIGHT GROUP      //
-    // ---------------------------//
-
-    // What to do when one group is hovered
-    var highlight = function(d){
-      // reduce opacity of all groups
-      d3.selectAll(".bubbles").style("opacity", .05)
-      // expect the one that is hovered
-      d3.selectAll("."+d).style("opacity", 1)
-    }
-
-    // And when it is not hovered anymore
-    var noHighlight = function(d){
-      d3.selectAll(".bubbles").style("opacity", 1)
-    }
+    // -3- Trigger the functions for hover
+    .on("mouseover", showTooltip )
+    .on("mousemove", moveTooltip )
+    .on("mouseleave", hideTooltip )
 
     // ---------------------------//
     //       LEGEND              //
     // ---------------------------//
     // Add legend: circles
-    var valuesToShow = [10000*index, 100000*index, 1000000*index]
+    var valuesToShow = [10000, 100000, 1000000]
     var xCircle = 690
     var xLabel = 740
     svg
@@ -309,14 +321,13 @@ d3.csv("factbook.csv", function(error, data) {
     svg.append("text")
       .attr('x', xCircle)
       .attr("y", height - 100 +30)
-      .text("Population (M)")
+      .text(options[2]+"(M)")
       .attr("text-anchor", "middle")
 
     // Add one dot in the legend for each name.
     var size = 20
-    var allgroups = ["0-10", "10-20", "20-30", "30-40", "40-50"]
     svg.selectAll("myrect")
-      .data(allgroups)
+      .data(color_group)
       .enter()
       .append("circle")
         .attr("cx", 690)
@@ -328,7 +339,7 @@ d3.csv("factbook.csv", function(error, data) {
 
     // Add labels beside legend dots
     svg.selectAll("mylabels")
-      .data(allgroups)
+      .data(color_group)
       .enter()
       .append("text")
         .attr("x", 690 + size*.8)
@@ -338,10 +349,8 @@ d3.csv("factbook.csv", function(error, data) {
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
         .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
+  } // end of function
 
-  } // end of update function
-
-  }); //end of data input
+}); // end of input data
 
 </script>
