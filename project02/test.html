@@ -110,11 +110,10 @@ d3.csv("factbook.csv", function(error, data) {
     var selectedValue = this.value;
     update(selectedValue);
   })
-
   // A function that update the chart
   function update(selectedGroup) {
     var real_data = [];
-    var index = 1;
+    var index = 2;
     if (selectedGroup == "0-10") {
       real_data = data1;
     }else if (selectedGroup == "10-20") {
@@ -127,21 +126,17 @@ d3.csv("factbook.csv", function(error, data) {
       real_data = data5;
     }else if (selectedGroup == "all" ){
       real_data = data;
-      index = 1;
     }else{
       // index for changing the area of circles
-      index = selectedGroup * 0.5;
+      index = selectedGroup;
     }
 
     if (isNaN(selectedGroup)) {
-      // remove all the precious circles
+    //   // remove all the precious circles
       svg.selectAll("g").selectAll("circle").remove();
     }else {
       svg.selectAll("legend").remove();
     }
-
-    console.log(index);
-
     // ---------------------------//
     //       AXIS  AND SCALE      //
     // ---------------------------//
@@ -174,12 +169,24 @@ d3.csv("factbook.csv", function(error, data) {
         .attr("x", 0)
         .attr("y", -20 )
         .text("Life Expectancy")
-        .attr("text-anchor", "start")
+        .attr("text-anchor", "start");
 
     // Add a scale for bubble size
-    var z = d3.scaleSqrt()
-      .domain([1000, 1000000])
-      .range([1, 30]);
+    if (index == 1) {
+      svg.selectAll("*").remove();
+      var z = d3.scaleSqrt()
+        .domain([500, 500000])
+        .range([1, 30]);
+    }else if (index == 2) {
+      var z = d3.scaleSqrt()
+        .domain([1000, 1000000])
+        .range([1, 30]);
+    }else {
+      var z = d3.scaleSqrt()
+        .domain([5000, 5000000])
+        .range([1, 30]);
+    }
+
 
     // Add a scale for bubble color
     var myColor = d3.scaleOrdinal()
@@ -266,7 +273,7 @@ d3.csv("factbook.csv", function(error, data) {
     //       LEGEND              //
     // ---------------------------//
     // Add legend: circles
-    var valuesToShow = [10000*index, 100000*index, 1000000*index]
+    var valuesToShow = [10000, 100000, 1000000]
     var xCircle = 690
     var xLabel = 740
     svg

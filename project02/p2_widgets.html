@@ -11,12 +11,14 @@
 <!-- Load color scale -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
+<!-- Add a dropdown list -->
 <select id="selectButton"></select>
-<!-- Create a div where the graph will take place -->
+
 <!-- Add a slider -->
-<input type="range" name="mySlider" id=mySlider min="1" max="3" value="2">
-<div id="my_dataviz">
-</div>
+<input type="range" name="mySlider" id=mySlider min="1" max="3" default="2">
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
 
 
 <!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
@@ -92,6 +94,8 @@ d3.csv("factbook.csv", function(error, data) {
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
+  update("all"); // set as default graph
+
 
   // When the button is changed, run the updateChart function
   d3.select("#selectButton").on("change", function(d) {
@@ -109,10 +113,8 @@ d3.csv("factbook.csv", function(error, data) {
 
   // A function that update the chart
   function update(selectedGroup) {
-    // ---------------------------//
-    //       CIRCLES              //
-    // ---------------------------//
     var real_data = [];
+    var index = 1;
     if (selectedGroup == "0-10") {
       real_data = data1;
     }else if (selectedGroup == "10-20") {
@@ -125,135 +127,146 @@ d3.csv("factbook.csv", function(error, data) {
       real_data = data5;
     }else if (selectedGroup == "all" ){
       real_data = data;
+      index = 1;
+    }else{
+      // index for changing the area of circles
+      index = selectedGroup * 0.5;
     }
-    
-    // remove all the precious circles
-    svg.selectAll("g").selectAll("circle").remove();
 
-    // Add dots
-    svg.append('g')
-    .selectAll("dot")
-    .data(real_data)
-    .enter()
-    .append("circle")
-    .attr("class", function(d) { return "bubbles " + d.birth_rate })
-    .attr("cx", function (d) { return x(d.gdp_per_cap); } )
-    .attr("cy", function (d) { return y(d.life_exp_at_b); } )
-    .attr("r", function (d) { return z(d.population); } )
-    .style("fill", function (d) { return myColor(d.birth_rate); } )
+    if (isNaN(selectedGroup)) {
+      // remove all the precious circles
+      svg.selectAll("g").selectAll("circle").remove();
+    }else {
+      svg.selectAll("legend").remove();
+    }
 
-    // -3- Trigger the functions for hover
-    .on("mouseover", showTooltip )
-    .on("mousemove", moveTooltip )
-    .on("mouseleave", hideTooltip )
-  }
+    console.log(index);
 
-  // ---------------------------//
-  //       AXIS  AND SCALE      //
-  // ---------------------------//
+    // ---------------------------//
+    //       AXIS  AND SCALE      //
+    // ---------------------------//
 
-  // Add X axis
-  var x = d3.scaleLinear()
-    .domain([0, 45000])
-    .range([ 0, width ]);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).ticks(3));
+    // Add X axis
+    var x = d3.scaleLinear()
+      .domain([0, 45000])
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(3));
 
-  // Add X axis label:
-  svg.append("text")
-      .attr("text-anchor", "end")
-      .attr("x", width)
-      .attr("y", height+50 )
-      .text("GDP per Capita");
+    // Add X axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height+50 )
+        .text("GDP per Capita");
 
-  // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([20, 90])
-    .range([ height, 0]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([20, 90])
+      .range([ height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
 
-  // Add Y axis label:
-  svg.append("text")
-      .attr("text-anchor", "end")
-      .attr("x", 0)
-      .attr("y", -20 )
-      .text("Life Expectancy")
-      .attr("text-anchor", "start")
+    // Add Y axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", 0)
+        .attr("y", -20 )
+        .text("Life Expectancy")
+        .attr("text-anchor", "start")
 
-  // Add a scale for bubble size
-  var z = d3.scaleSqrt()
-    .domain([1000, 1000000])
-    .range([1, 30]);
+    // Add a scale for bubble size
+    var z = d3.scaleSqrt()
+      .domain([1000, 1000000])
+      .range([1, 30]);
 
-  // Add a scale for bubble color
-  var myColor = d3.scaleOrdinal()
-    .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
-    .range(d3.schemeSet1);
+    // Add a scale for bubble color
+    var myColor = d3.scaleOrdinal()
+      .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
+      .range(d3.schemeSet1);
 
-  // ---------------------------//
-  //      TOOLTIP               //
-  // ---------------------------//
+      // ---------------------------//
+      //       CIRCLES              //
+      // ---------------------------//
 
-  // -1- Create a tooltip div that is hidden by default:
-  var tooltip = d3.select("#my_dataviz")
-    .append("div")
-      .style("opacity", 0)
-      .attr("class", "tooltip")
-      .style("background-color", "black")
-      .style("border-radius", "5px")
-      .style("padding", "10px")
-      .style("color", "white")
+      // Add dots
+      svg.append('g')
+      .selectAll("dot")
+      .data(real_data)
+      .enter()
+      .append("circle")
+      .attr("class", function(d) { return "bubbles " + d.birth_rate })
+      .attr("cx", function (d) { return x(d.gdp_per_cap); } )
+      .attr("cy", function (d) { return y(d.life_exp_at_b); } )
+      .attr("r", function (d) { return z(d.population); } )
+      .style("fill", function (d) { return myColor(d.birth_rate); } )
 
-  // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
-  var showTooltip = function(d) {
-    tooltip
-      .transition()
-      .duration(200)
-    tooltip
-      .style("opacity", 1)
-      .html("Birth rate: " + d[' Birth rate'])
-      .style("left", (d3.mouse(this)[0]+30) + "px")
-      .style("top", (d3.mouse(this)[1]+30) + "px")
-  }
-  var moveTooltip = function(d) {
-    tooltip
-      .style("left", (d3.mouse(this)[0]+30) + "px")
-      .style("top", (d3.mouse(this)[1]+30) + "px")
-  }
-  var hideTooltip = function(d) {
-    tooltip
-      .transition()
-      .duration(200)
-      .style("opacity", 0)
-  }
+      // -3- Trigger the functions for hover
+      .on("mouseover", showTooltip )
+      .on("mousemove", moveTooltip )
+      .on("mouseleave", hideTooltip )
+
+    // ---------------------------//
+    //      TOOLTIP               //
+    // ---------------------------//
+
+    // -1- Create a tooltip div that is hidden by default:
+    var tooltip = d3.select("#my_dataviz")
+      .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "black")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
+        .style("color", "white")
+
+    // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+    var showTooltip = function(d) {
+      tooltip
+        .transition()
+        .duration(200)
+      tooltip
+        .style("opacity", 1)
+        .html("Birth rate: " + d[' Birth rate'])
+        .style("left", (d3.mouse(this)[0]+30) + "px")
+        .style("top", (d3.mouse(this)[1]+30) + "px")
+    }
+    var moveTooltip = function(d) {
+      tooltip
+        .style("left", (d3.mouse(this)[0]+30) + "px")
+        .style("top", (d3.mouse(this)[1]+30) + "px")
+    }
+    var hideTooltip = function(d) {
+      tooltip
+        .transition()
+        .duration(200)
+        .style("opacity", 0)
+    }
 
 
-  // ---------------------------//
-  //       HIGHLIGHT GROUP      //
-  // ---------------------------//
+    // ---------------------------//
+    //       HIGHLIGHT GROUP      //
+    // ---------------------------//
 
-  // What to do when one group is hovered
-  var highlight = function(d){
-    // reduce opacity of all groups
-    d3.selectAll(".bubbles").style("opacity", .05)
-    // expect the one that is hovered
-    d3.selectAll("."+d).style("opacity", 1)
-  }
+    // What to do when one group is hovered
+    var highlight = function(d){
+      // reduce opacity of all groups
+      d3.selectAll(".bubbles").style("opacity", .05)
+      // expect the one that is hovered
+      d3.selectAll("."+d).style("opacity", 1)
+    }
 
-  // And when it is not hovered anymore
-  var noHighlight = function(d){
-    d3.selectAll(".bubbles").style("opacity", 1)
-  }
+    // And when it is not hovered anymore
+    var noHighlight = function(d){
+      d3.selectAll(".bubbles").style("opacity", 1)
+    }
 
     // ---------------------------//
     //       LEGEND              //
     // ---------------------------//
-
-    console.log(index);
     // Add legend: circles
-    var valuesToShow = [10000, 100000, 1000000]
+    var valuesToShow = [10000*index, 100000*index, 1000000*index]
     var xCircle = 690
     var xLabel = 740
     svg
@@ -327,5 +340,8 @@ d3.csv("factbook.csv", function(error, data) {
         .on("mouseover", highlight)
         .on("mouseleave", noHighlight)
 
-  });
+  } // end of update function
+
+  }); //end of data input
+
 </script>
