@@ -18,6 +18,9 @@
 <b>radius:</b><select id="selectRadius"></select>
 <b>color:</b><select id="selectColor"></select>
 
+<!-- Add a slider -->
+<input type="range" name="mySlider" id=mySlider min="1" max="3" default="2">
+
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
@@ -131,14 +134,15 @@ d3.csv("factbook.csv", function(error, data) {
   // ---------------------------
   //////// dropdown list ///////
   // ---------------------------
-  var group = ["GDP per capita", "Life expectancy at birth", "Population", "all"];
+  var group = ["GDP per capita", "Life expectancy at birth", "Population", "all", 2]; // initial graph
+  var attr_group = ["GDP per capita", "Life expectancy at birth", "Population"];
   var color_group = ["0-10", "10-20", "20-30", "30-40", "40-50"]
   var options = ["","",""];
   update(group);
   // add the options to the button
   d3.selectAll("#selectx, #selecty, #selectRadius")
     .selectAll('myOptions')
-    .data(group)
+    .data(attr_group)
     .enter()
     .append('option')
     .text(function (d) { return d; }) // text showed in the menu
@@ -153,7 +157,7 @@ d3.csv("factbook.csv", function(error, data) {
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
   // When the button is changed, run the updateChart function
-  d3.selectAll("#selectx, #selecty, #selectRadius, #selectColor").on("change", function(d) {
+  d3.selectAll("#selectx, #selecty, #selectRadius, #selectColor, #mySlider").on("change", function(d) {
     // remove previous drawing
     // svg.selectAll("g").selectAll("circle").remove();
     svg.selectAll("*").remove();
@@ -162,6 +166,7 @@ d3.csv("factbook.csv", function(error, data) {
     options[1] = d3.select("#selecty").property("value");
     options[2] = d3.select("#selectRadius").property("value");
     options[3] = d3.select("#selectColor").property("value");
+    options[4] = d3.select("#mySlider").property("value");
     update(options);
   })
 
@@ -245,8 +250,9 @@ d3.csv("factbook.csv", function(error, data) {
         .attr("text-anchor", "start")
 
     // Add a scale for bubble size
+    console.log(options[4]*0.5);
     var z = d3.scaleSqrt()
-      .domain([1000, 1000000])
+      .domain([1000*options[4], 1000000*options[4]])
       .range([3, 30]);
 
     // Add a scale for bubble color
