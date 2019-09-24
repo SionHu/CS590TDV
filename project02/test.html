@@ -2,24 +2,43 @@
 <!DOCTYPE html>
 <head>
   <link rel="shortcut icon" href="#">
-  <title>Xiao: p2_bubbles</title>
+  <title>Xiao: p2_brushing</title>
 </head>
 <meta charset="utf-8">
+
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
 
 <!-- Load color scale -->
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-<!-- Add a dropdown list -->
-<select id="selectButton"></select>
+<body>
 
-<!-- Add a slider -->
-<input type="range" name="mySlider" id=mySlider min="1" max="3" default="2">
+  <!-- Create a 2 x 2 matrix to show 4 graphs -->
+  <div class="row">
+    <div class="column">
+      <!-- Add a dropdown list and slider-->
+      <div class="row"><b>x:</b><select id="selectx1"></select></div>
+      <div class="row"><b>y:</b><select id="selecty1"></select></div>
+      <div class="row"><b>radius:</b><select id="selectRadius1"></select></div>
+      <div class="row"><b>color:</b><select id="selectColor1"></select></div>
+      <div class="row"><input type="range" name="mySlider1" id=mySlider1 min="1" max="3" default="2"></div>
+      <!-- Create a div where the graph will take place -->
+      <div id="my_dataviz1"></div>
+    </div>
+    <div class="column">
+      <!-- Add a dropdown list and slider-->
+      <div class="row"><b>x:</b><select id="selectx2"></select></div>
+      <div class="row"><b>y:</b><select id="selecty2"></select></div>
+      <div class="row"><b>radius:</b><select id="selectRadius2"></select></div>
+      <div class="row"><b>color:</b><select id="selectColor2"></select></div>
+      <div class="row"><input type="range" name="mySlider2" id=mySlider2 min="1" max="3" default="2"></div>
+      <!-- Create a div where the graph will take place -->
+      <div id="my_dataviz2"></div>
+    </div>
+  </div>
 
-<!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
-
+</body>
 
 <!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
 <style>
@@ -30,230 +49,258 @@
   }
   .bubbles:hover {
     stroke: black;
-}
+  }
 </style>
 
 <script>
 
 // set the dimensions and margins of the graph
-var margin = {top: 40, right: 150, bottom: 60, left: 30},
-    width = 800 - margin.left - margin.right,
+var margin = {top: 40, right: 150, bottom: 60, left: 40},
+    width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+var dataviz_list = ["#my_dataviz1","#my_dataviz2","#my_dataviz3","#my_dataviz4"];
+var selectx_list = ["#selectx1","#selectx2","#selectx3","#selectx4"];
+var selecty_list = ["#selecty1","#selecty2","#selecty3","#selecty4"];
+// append the 4 svg objects to the body of the page
+for (var i = 1; i < 5; i++) {
+  this["svg"+i] = d3.select(dataviz_list[i])
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+};
+var svg_list = [this.svg1, this.svg2];
 
 //Read the data
 d3.csv("factbook.csv", function(error, data) {
   // rename the header name
-  var data1 = [];
-  var data2 = [];
-  var data3 = [];
-  var data4 = [];
-  var data5 = [];
   data.forEach(function(d){
     var brate = parseFloat(d[' Birth rate']);
     if (brate <= 10) {
       d.birth_rate = "0-10";
-      data1.push(d);
     }else if (10 < brate && brate <= 20) {
       d.birth_rate = "10-20";
-      data2.push(d);
     }else if (20 < brate && brate <= 30) {
       d.birth_rate = "20-30";
-      data3.push(d);
     }else if (30 < brate && brate <= 40) {
       d.birth_rate = "30-40";
-      data4.push(d);
     }else {
       d.birth_rate = "40-50";
-      data5.push(d);
     };
     d.gdp_per_cap = parseFloat(d['  GDP per capita '].replace('$','').replace(',',''));
     d.life_exp_at_b = parseFloat(d[' Life expectancy at birth']);
     d.population = parseInt(d['  Population '].replace(',', ''));
-    // for testing
-    d.area = d[' Area'];
+    d.investment = parseFloat(d[' Investment']);
+    // check which continent the counrty is from
+    var country = d['Country'];
+    var africa = ["Cameroon","Nigeria","Egypt","Ethiopia","South Africa","Tanzania","Kenya"
+    ,"Morocco","Algeria","Uganda","Ghana","Mozambique","Madagascar","Cote d'Ivoire","Burkina Faso"
+    ,"Zimbabwe","Malawi","Zambia","Angola","Senegal","Tunisia","Chad","Guinea","Rwanda","Burundi"
+    ,"Togo","Eritrea","Congo Republic of the","Namibia","Lesotho","Botswana","Gambia The","Gabon"
+    ,"Mauritius","Swaziland","Trinidad and Tobago","Equatorial Guinea","Cape Verde","Sao Tome and Principe","Seychelles"
+    ,"Benin"];
+    var asia = ["China","India","Indonesia","Pakistan","Bangladesh","Russia","Japan","Philippines"
+    ,"Vietnam","Iran","Thailand","Korea South","Burma","Sudan","Uzbekistan","Saudi Arabia","Iraq"
+    ,"Malaysia","Taiwan","Yemen","Sri Lanka","Syria","Kazakhstan","Cambodia","Azerbaijan","Tajikistan"
+    ,"Hong Kong","Israel","Laos","Kyrgyzstan","Turkmenistan","Singapore","Oman","Armenia","United Arab Emirates"
+    ,"Kuwait","Qatar","Cyprus","Bahrain"];
+    var austrlia = ["Australia","New Zealand","Papua New Guinea"];
+    var europe = ["Germany","Turkey","France","United Kingdom","Italy","Ukraine","Spain","Poland","Romania","Netherlands"
+    ,"Greece","Portugal","Belgium","Belarus","Czech Republic","Hungary","Sweden","Austria","Switzerland","Bulgaria"
+    ,"Denmark","Slovakia","Finland","Norway","Croatia","Moldova","Ireland","Lebanon","Lithuania","Albania","Latvia","Macedonia"
+    ,"Slovenia","Estonia","Malta","Iceland","Serbia and Montenegro","Bosnia and Herzegovina"];
+    var north_america = ["Canada","Haiti","Libya","Nicaragua","Georgia","Jamaica","Belize","United States"];
+    var south_america = ["Brazil","Mexico","Colombia","Argentina","Peru","Venezuela","Chile","Guatemala","Ecuador","Cuba"
+    ,"Dominican Republic","Bolivia","Honduras","El Salvador","Paraguay","Jordan","Costa Rica","Uruguay","Panama","Guyana"];
+    if (africa.includes(country)) {
+      d.continent = "africa";
+    }else if (asia.includes(country)) {
+      d.continent = "asia";
+    }else if (austrlia.includes(country)) {
+      d.continent = "austrlia";
+    }else if (europe.includes(country)) {
+      d.continent = "europe";
+    }else if (north_america.includes(country)) {
+      d.continent = "north_america";
+    }else if (south_america.includes(country)) {
+      d.continent = "south_america";
+    }
   });
 
-  // List of groups
-  var allGroup = ["0-10", "10-20", "20-30", "30-40", "40-50", "all"]
+  // ---------------------------
+  //////// dropdown list ///////
+  // ---------------------------
+  var group = ["GDP per capita", "Life expectancy at birth", "Population", "all", 2]; // initial graph
+  var attr_group = ["GDP per capita", "Life expectancy at birth", "Population", "Investment"];
+  var color_group = ["0-10", "10-20", "20-30", "30-40", "40-50", "all"]
+  var color_group2 = ["africa","asia","austrlia","europe","south_america","north_america"];
+  var options = ["","","","",""];
+  update(group);
 
-  // add the options to the button
-  d3.select("#selectButton")
+  // -------------------------------------- //
+  // Modify the inputs from the dropdown list
+  // -------------------------------------- //
+  // add the options to the  button
+  d3.selectAll("#selectx1, #selecty1, #selectRadius1")
     .selectAll('myOptions')
-   	.data(allGroup)
+    .data(attr_group)
     .enter()
-  	.append('option')
+    .append('option')
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
-  update("all"); // set as default graph
-
+  d3.select("#selectColor1")
+    .selectAll('myOptions')
+    .data(color_group.concat(color_group2))
+    .enter()
+    .append('option')
+    .text(function (d) { return d; }) // text showed in the menu
+    .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
   // When the button is changed, run the updateChart function
-  d3.select("#selectButton").on("change", function(d) {
-      // recover the option that has been chosen
-      var selectedOption = d3.select(this).property("value")
-      // run the updateChart function with this selected option
-      update(selectedOption)
+  d3.selectAll("#selectx1, #selecty1, #selectRadius1, #selectColor1, #mySlider1").on("change", function(d) {
+    // remove previous drawing
+    svg1.selectAll("*").remove();
+    // recover the option that has been chosen
+    options[0] = d3.select("#selectx1").property("value");
+    options[1] = d3.select("#selecty1").property("value");
+    options[2] = d3.select("#selectRadius1").property("value");
+    options[3] = d3.select("#selectColor1").property("value");
+    options[4] = d3.select("#mySlider1").property("value");
+    update(options);
   })
 
-  // Listen to the slider?
-  d3.select("#mySlider").on("change", function(d){
-    var selectedValue = this.value;
-    update(selectedValue);
-  })
-
-  // A function that update the chart
-  function update(selectedGroup) {
-    var real_data = [];
-    var index = selectedGroup;
-    if (selectedGroup == "0-10") {
-      real_data = data1;
-    }else if (selectedGroup == "10-20") {
-      real_data = data2;
-    }else if (selectedGroup == "20-30") {
-      real_data = data3;
-    }else if (selectedGroup == "30-40") {
-      real_data = data4;
-    }else if (selectedGroup == "40-50"){
-      real_data = data5;
-    }else if (selectedGroup == "all" ){
-      real_data = data;
+  function map(option, d){
+    if (option == "Birth rate") {
+      return d.birth_rate;
+    }else if (option == "GDP per capita") {
+      return d.gdp_per_cap;
+    }else if (option == "Life expectancy at birth") {
+      return d.life_exp_at_b;
+    }else if (option == "Population") {
+      return d.population;
+    }else if (option == "Investment") {
+      return d.investment;
     }
-
-    if (isNaN(selectedGroup)) {
-      // remove all the precious circles
-      svg.selectAll("g").selectAll("circle").remove();
+  }
+  function map_domain(option){
+    if (option == "Birth rate") {
+      return [0, 50];
+    }else if (option == "GDP per capita") {
+      return [0, 45000];
+    }else if (option == "Life expectancy at birth") {
+      return [20, 90];
+    }else if (option == "Population") {
+      return [50000, 1400000000];
+    }else if (option == "Investment") {
+      return [0, 70];
     }
+  }
+  function map_color(option){
+    if (option == "0-10") {
+      return data.filter(function(d){return d.birth_rate=="0-10";})
+    }else if(option == "10-20"){
+      return data.filter(function(d){return d.birth_rate=="10-20";})
+    }else if(option == "20-30"){
+      return data.filter(function(d){return d.birth_rate=="20-30";})
+    }else if(option == "30-40"){
+      return data.filter(function(d){return d.birth_rate=="30-40";})
+    }else if(option == "all"){
+      return data;
+    }else if(option == "asia"){
+      return data.filter(function(d){return d.continent=="asia";})
+    }else if(option == "africa"){
+      return data.filter(function(d){return d.continent=="africa";})
+    }else if(option == "austrlia"){
+      return data.filter(function(d){return d.continent=="austrlia";})
+    }else if(option == "europe"){
+      return data.filter(function(d){return d.continent=="europe";})
+    }else if(option == "north_america"){
+      return data.filter(function(d){return d.continent=="north_america";})
+    }else if(option == "south_america"){
+      return data.filter(function(d){return d.continent=="south_america";})
+    }
+  }
 
+// ---------------------------- //
+// update the graph accordingly //
+// ---------------------------- //
+function update(options){
+  for (var i = 0; i < svg_list.length; i++) {
     // ---------------------------//
     //       AXIS  AND SCALE      //
     // ---------------------------//
-
     // Add X axis
     var x = d3.scaleLinear()
-      .domain([0, 45000])
+      .domain(map_domain(options[0]))
       .range([ 0, width ]);
-    svg.append("g")
+    svg_list[i].append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).ticks(3));
 
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain(map_domain(options[1]))
+      .range([ height, 0]);
+    svg_list[i].append("g")
+      .call(d3.axisLeft(y));
+
     // Add X axis label:
-    svg.append("text")
+    svg_list[i].append("text")
         .attr("text-anchor", "end")
         .attr("x", width)
         .attr("y", height+50 )
-        .text("GDP per Capita");
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([20, 90])
-      .range([ height, 0]);
-    svg.append("g")
-      .call(d3.axisLeft(y));
+        .text(options[0]);
 
     // Add Y axis label:
-    svg.append("text")
+    svg_list[i].append("text")
         .attr("text-anchor", "end")
         .attr("x", 0)
         .attr("y", -20 )
-        .text("Life Expectancy")
+        .text(options[1])
         .attr("text-anchor", "start")
 
-    console.log(1000*index);
     // Add a scale for bubble size
     var z = d3.scaleSqrt()
-      .domain([1000, 1000000])
-      .range([1, 30]);
+      .domain([1000*options[4], 1000000*options[4]])
+      .range([3, 30]);
 
+    if (color_group.includes(options[3])) {
+      var myColor = d3.scaleOrdinal()
+        .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
+        .range(d3.schemeSet1);
+    }else {
+      var myColor = d3.scaleOrdinal()
+        .domain(["africa","asia","austrlia","europe","south_america","north_america"])
+        .range(d3.schemeSet1);
+    }
     // Add a scale for bubble color
-    var myColor = d3.scaleOrdinal()
-      .domain(["0-10", "10-20", "20-30", "30-40", "40-50"])
-      .range(d3.schemeSet1);
-
-      // ---------------------------//
-      //       CIRCLES              //
-      // ---------------------------//
-
-      // Add dots
-      svg.append('g')
-      .selectAll("dot")
-      .data(real_data)
-      .enter()
-      .append("circle")
-      .attr("class", function(d) { return "bubbles " + d.birth_rate })
-      .attr("cx", function (d) { return x(d.gdp_per_cap); } )
-      .attr("cy", function (d) { return y(d.life_exp_at_b); } )
-      .attr("r", function (d) { return z(d.population); } )
-      .style("fill", function (d) { return myColor(d.birth_rate); } )
-
-      // -3- Trigger the functions for hover
-      .on("mouseover", showTooltip )
-      .on("mousemove", moveTooltip )
-      .on("mouseleave", hideTooltip )
 
     // ---------------------------//
-    //      TOOLTIP               //
+    //       CIRCLES              //
     // ---------------------------//
+    var real_data = map_color(options[3]);
+    // Add dots
+    svg_list[i].append('g')
+    .selectAll("dot")
+    .data(real_data)
+    .enter()
+    .append("circle")
+    .attr("class", function(d) {
+      if (color_group.includes(options[3])) { return "bubbles " + d.birth_rate }
+      else { return "bubbles " + d.continent; }
+    })
+    .attr("cx", function(d){ return x1(map(options[0], d)); })
+    .attr("cy", function (d) { return y1(map(options[1], d)); } )
+    .attr("r", function (d) { return z1(map(options[2], d)); } )
+    .style("fill", function (d) {
+      if (color_group.includes(options[3])) { return myColor(d.birth_rate); }
+      else { return myColor(d.continent); }
+    })
 
-    // -1- Create a tooltip div that is hidden by default:
-    var tooltip = d3.select("#my_dataviz")
-      .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "black")
-        .style("border-radius", "5px")
-        .style("padding", "10px")
-        .style("color", "white")
-
-    // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
-    var showTooltip = function(d) {
-      tooltip
-        .transition()
-        .duration(200)
-      tooltip
-        .style("opacity", 1)
-        .html("Birth rate: " + d[' Birth rate'])
-        .style("left", (d3.mouse(this)[0]+30) + "px")
-        .style("top", (d3.mouse(this)[1]+30) + "px")
-    }
-    var moveTooltip = function(d) {
-      tooltip
-        .style("left", (d3.mouse(this)[0]+30) + "px")
-        .style("top", (d3.mouse(this)[1]+30) + "px")
-    }
-    var hideTooltip = function(d) {
-      tooltip
-        .transition()
-        .duration(200)
-        .style("opacity", 0)
-    }
-
-
-    // ---------------------------//
-    //       HIGHLIGHT GROUP      //
-    // ---------------------------//
-
-    // What to do when one group is hovered
-    var highlight = function(d){
-      // reduce opacity of all groups
-      d3.selectAll(".bubbles").style("opacity", .05)
-      // expect the one that is hovered
-      d3.selectAll("."+d).style("opacity", 1)
-    }
-
-    // And when it is not hovered anymore
-    var noHighlight = function(d){
-      d3.selectAll(".bubbles").style("opacity", 1)
-    }
 
     // ---------------------------//
     //       LEGEND              //
@@ -262,66 +309,69 @@ d3.csv("factbook.csv", function(error, data) {
     var valuesToShow = [10000, 100000, 1000000]
     var xCircle = 690
     var xLabel = 740
-    svg
+    svg_list[i]
       .selectAll("legend")
       .data(valuesToShow)
       .enter()
       .append("circle")
         .attr("cx", xCircle)
-        .attr("cy", function(d){ return height - 100 - z(d) } )
-        .attr("r", function(d){ return z(d) })
+        .attr("cy", function(d){ return height - 100 - z1(d) } )
+        .attr("r", function(d){ return z1(d) })
         .style("fill", "none")
         .attr("stroke", "black")
 
     // Add legend: segments
-    svg
+    svg_list[i]
       .selectAll("legend")
       .data(valuesToShow)
       .enter()
       .append("line")
-        .attr('x1', function(d){ return xCircle + z(d) } )
+        .attr('x1', function(d){ return xCircle + z1(d) } )
         .attr('x2', xLabel)
-        .attr('y1', function(d){ return height - 100 - z(d) } )
-        .attr('y2', function(d){ return height - 100 - z(d) } )
+        .attr('y1', function(d){ return height - 100 - z1(d) } )
+        .attr('y2', function(d){ return height - 100 - z1(d) } )
         .attr('stroke', 'black')
         .style('stroke-dasharray', ('2,2'))
 
     // Add legend: labels
-    svg
+    svg_list[i]
       .selectAll("legend")
       .data(valuesToShow)
       .enter()
       .append("text")
         .attr('x', xLabel)
-        .attr('y', function(d){ return height - 100 - z(d) } )
+        .attr('y', function(d){ return height - 100 - z1(d) } )
         .text( function(d){ return d/1000 } )
         .style("font-size", 10)
         .attr('alignment-baseline', 'middle')
 
     // Legend title
-    svg.append("text")
+    svg_list[i].append("text")
       .attr('x', xCircle)
       .attr("y", height - 100 +30)
-      .text("Population (M)")
+      .text(options[2]+"(M)")
       .attr("text-anchor", "middle")
 
     // Add one dot in the legend for each name.
-    var size = 20
-    var allgroups = ["0-10", "10-20", "20-30", "30-40", "40-50"]
-    svg.selectAll("myrect")
-      .data(allgroups)
+    var size = 20;
+    var color_list = [];
+    if (color_group.includes(options[3])) {
+      color_list = color_group.slice(0,5);
+    }else {
+      color_list = color_group2;
+    }
+    svg_list[i].selectAll("myrect")
+      .data(color_list)
       .enter()
       .append("circle")
         .attr("cx", 690)
         .attr("cy", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("r", 7)
         .style("fill", function(d){ return myColor(d)})
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
 
     // Add labels beside legend dots
-    svg.selectAll("mylabels")
-      .data(allgroups)
+    svg_list[i].selectAll("mylabels")
+      .data(color_list)
       .enter()
       .append("text")
         .attr("x", 690 + size*.8)
@@ -330,11 +380,10 @@ d3.csv("factbook.csv", function(error, data) {
         .text(function(d){ return d})
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
 
-  } // end of update function
+  } // end of function
+} // end of for
 
-  }); //end of data input
+}); // end of input data
 
 </script>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <head>
   <link rel="shortcut icon" href="#">
-  <title>Xiao: p2_bubbles</title>
+  <title>Xiao: p2_toolip</title>
 </head>
 <meta charset="utf-8">
 
@@ -114,7 +114,7 @@ var svg4 = d3.select("#my_dataviz4")
 
 //Read the data
 d3.csv("factbook.csv", function(error, data) {
-  alert("I tried really hard but really could not get the brushing to work X(")
+  alert("tooltip shows at the bottom of each graph")
   // rename the header name
   data.forEach(function(d){
     var brate = parseFloat(d[' Birth rate']);
