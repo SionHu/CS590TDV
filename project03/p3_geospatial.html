@@ -40,6 +40,8 @@
 <button id="toggle">Toggle Map</button>
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.4/randomColor.js"></script>
+
 <script>
 var positioning = 'map'
 
@@ -47,7 +49,7 @@ var width = 960
 var height = 600
 
 var projection = d3.geoAlbersUsa()
-    .scale([width * 1.25])
+    .scale([width * 1.27])
     .translate([width / 2, height / 2])
 
 // var path = d3.geoPath().projection(projection)
@@ -109,6 +111,19 @@ function initialize(error, results) {
         .enter().append('line')
         .attr('stroke-width', function (d) { return d.count / 4 })
 
+    // color code for nodes
+    var all_states = [] // there are 54 states need to be color coded
+    graph.nodes.forEach(function(d){
+      if (!all_states.includes(d.state)) {
+        all_states.push(d.state)
+      }
+    })
+    var all_color = randomColor({count: all_states.length})
+
+    var color = d3.scaleOrdinal()
+      .domain(all_states)
+      .range(all_color);
+
     var nodes = svg.append('g')
         .attr('class', 'nodes')
         .selectAll('circle')
@@ -116,6 +131,9 @@ function initialize(error, results) {
         .enter().append('circle')
         .attr('r', 5)
         .call(drag)
+        .style("fill",function(d) {
+          return color(d.state);
+        })
 
     nodes.append('title')
         .text(function (d) { return d.faa })
@@ -126,9 +144,8 @@ function initialize(error, results) {
     function fixed(immediate) {
         graph.nodes.forEach(function (d) {
             var pos = projection([d.longitude, d.latitude])
-            console.log(pos);
             if (pos == null) {
-              console.log("here you are");
+              // console.log("here you are, boy");
               pos = [100, 100]
             }
             d.x = pos[0]
