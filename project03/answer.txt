@@ -1,0 +1,25 @@
+--- Xiao Hu: Answer to Questions ---
+
+* Task 1:
+    Compare the results that you obtained in each case.
+    What are the pros and cons of the layout you obtained with and without using
+    the provided coordinates?
+    Which one do you find superior and why?
+- Answer:
+    Without using the provided coordinates, the nodes of the force graph is more
+    towards the gravity center. It's easier to have a close look at the entire
+    graph, but it's certainly not useful to see the clear relationships between
+    the nodes, since many of them are clustering with each other. Although, dragging
+    makes it more fun to play with, moving links disturb the focus of the audience
+    in a certain level.
+
+    The graph with coordinates, on the other hand, requires a relatively larger scale
+    to present due to the various distances between nodes' coordinates. However, it shows
+    more geometric information of the nodes (airports) on the graph, and demonstrates
+    more clear relationships between the nodes.
+
+    I will choose the nodes with coordinates.
+
+
+* Task 2:
+- Answer:
