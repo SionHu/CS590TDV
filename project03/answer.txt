@@ -5,6 +5,7 @@
     What are the pros and cons of the layout you obtained with and without using
     the provided coordinates?
     Which one do you find superior and why?
+
 - Answer:
     Without using the provided coordinates, the nodes of the force graph is more
     towards the gravity center. It's easier to have a close look at the entire
@@ -22,4 +23,23 @@
 
 
 * Task 2:
+    Compare the results you obtained in this task with the ones from the
+    previous task. What are the respective pros and cons of each solution?
+
 - Answer:
+    The main difference between the graphs generated for these 2 tasks is this graph
+    is not only showing the nodes and links, but also showing the corresponding
+    geometric information of each node on the map. The advantage of this task's
+    graph is obvious: it relates audience previous understanding of the US airlines
+    and geometric image with the information, which leaves more impression on
+    the information that the connections between airports. For example, as shown
+    on the graph, airports grouping on the right and left side of the graph representing
+    the east and west coast of US. It fits the impression of most people that
+    important economic cities locate in these areas. Graph base on coordinates also
+    project US map as a whole, which stretch the graph width to include the location
+    of Hawaii and Alaska.
+
+    From my perspective, the only advantage that task 1's graphs possess is that, if
+    needed, the graph base on coordinate shows accurate geometric location of the airports
+    base on the Earth map, which this task's graph cannot achieve for the used US
+    map rearranges Alaska and Hawaii to closer to the rest 48 states.
