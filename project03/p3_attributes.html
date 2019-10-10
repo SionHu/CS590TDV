@@ -3,7 +3,7 @@
 <style>
   #toggle {
       position: absolute;
-      right: 15px; top: 15px;
+      right: 100px; top: 15px;
       z-index: 100;
   }
 
@@ -77,6 +77,11 @@ d3.queue()
     .defer(d3.json, 'https://d3js.org/us-10m.v1.json')
     .awaitAll(initialize)
 
+var svg = d3.select('body')
+    .append('svg')
+    .attr('width', width*1.5)
+    .attr('height', height*1.5)
+
 function initialize(error, results) {
     if (error) { throw error }
 
@@ -86,13 +91,7 @@ function initialize(error, results) {
 
     simulation.nodes(graph.nodes)
         .on('tick', ticked)
-
     simulation.force('link').links(graph.links)
-
-    var svg = d3.select('body')
-        .append('svg')
-        .attr('width', width*1.5)
-        .attr('height', height*1.5)
 
     var map = svg.append('g')
         .attr('class', 'map')
@@ -258,7 +257,51 @@ function initialize(error, results) {
       .style("text-anchor", "begin")
       .text(function(d) { return d; });
 
-    legend2.append()
+    var valuesToShow = [1, 2, 3]
+    var textToShow = ["---------1", "---------3", "---------5"]
+
+    legend2.append("circle")
+      .data(valuesToShow)
+      .attr("cx", width + 150)
+      .attr("cy", function(d){ return height - 120 - d*10 } )
+      .attr("r", function(d){ return d*10 })
+      .style("fill", "none")
+      .attr("stroke", "black")
+
+    legend2.append("text")
+      .data(textToShow)
+      .attr("x", width + 150)
+      .attr("y", function(valuesToShow, d){ return height - 120 - d })
+      .attr("dy", ".35em")
+      .style("text-anchor", "begin")
+      .text(function(d){ return d; });
+
+    var textToShow2 = ["1", "2", "3"]
+    legend2.append("rect")
+      .data(valuesToShow)
+      .attr("x", width + 140)
+      .attr("y", height - 40)
+      .attr("width", 50)
+      .attr("height", function(d){ return d*0.9 })
+      .style("fill", "#679");
+
+    legend2.append("text")
+      .data(textToShow2)
+      .attr("x", width + 120)
+      .attr("y", function(valuesToShow, d){ return height - 40 - d })
+      .attr("dy", ".35em")
+      .style("text-anchor", "begin")
+      .text(function(d){ return d; });
+
+    var valuetemp = ["Importance factor", "Frequency (M)"]
+    legend2.append("text")
+      .data(valuetemp)
+      .attr("x", width + 120)
+      .attr("y", function(valuesToShow, d){ return height - 150 + d*70 })
+      .attr("dy", ".35em")
+      .style("text-anchor", "begin")
+      .style("font-weight", "bold")
+      .text(function(d){ return d; });
 
 }
 
