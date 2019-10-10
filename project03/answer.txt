@@ -43,3 +43,24 @@
     needed, the graph base on coordinate shows accurate geometric location of the airports
     base on the Earth map, which this task's graph cannot achieve for the used US
     map rearranges Alaska and Hawaii to closer to the rest 48 states.
+
+* Task 5:
+    Comment on the benefits and limitations of the filtering options introduced in this task.
+    What additional control mechanisms would you wish to have to improve the visualization of this dataset?
+
+- Answer:
+    From my perspective, with filtering option applied to this graph, the benefits
+    are significant. It made it much easier to pop the nodes with customized Importance
+    factor and Frequency. After all, with all the edges crossing over the graph,
+    it's hard to tell the clear connection between airports, or even the location
+    of the airports. The filtering tool definitely helps on visualize the required
+    information on the graph.
+
+    However, the limitation is also obvious. The lower limit of two scroll bars
+    make it easier to find the higher-value nodes/edges, but doesn't solve the
+    problem of tiny nodes and almost invisible links. To solve this problem, I
+    propose to implement the following additional control mechanisms to improve the
+    visualization of this dataset:
+      1. Scroll control to zoom in/out.
+      2. Scroll control to increase/decrease the size of nodes or edges.
+    These 2 control tools would solve the problem of nodes/edges being too small. 

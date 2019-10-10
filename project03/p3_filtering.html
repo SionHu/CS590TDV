@@ -180,18 +180,6 @@ function initialize(error, results) {
 
       })
 
-    var slider = svg.append("g")
-      .attr("class", "slider")
-      .call(brush);
-
-    slider.selectAll(".extent,.resize")
-      .remove();
-
-    var handle = slider.append("circle")
-      .attr("class", "handle")
-      .attr("transform", "translate(" + (width - 20) + ",0)")
-      .attr("r", 5);
-
     fixed(true)
     d3.select('#toggle').on('click', toggle)
 
