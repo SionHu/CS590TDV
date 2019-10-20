@@ -1,0 +1,1476 @@
+{
+ "name": ".",
+ "value": 2518920,
+ "children": [
+  {
+   "name": "pstoedit",
+   "value": 2324,
+   "children": [
+    {"name": "bin", "value": 16},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 164,
+     "children": [
+      {"name": "pstoedit", "value": 164}
+     ]
+    },
+    {
+     "name": "lib",
+     "value": 1084,
+     "children": [
+      {"name": "pstoedit", "value": 680},
+      {"name": "pkgconfig", "value": 4}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 1032,
+     "children": [
+      {
+       "name": "pstoedit",
+       "value": 552,
+       "children": [
+        {"name": "swffonts", "value": 24}
+       ]
+      },
+      {
+       "name": "man",
+       "value": 56,
+       "children": [
+        {"name": "man1", "value": 56}
+       ]
+      },
+      {"name": "aclocal", "value": 8},
+      {
+       "name": "doc",
+       "value": 416,
+       "children": [
+        {"name": "pstoedit", "value": 416}
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "rubberband",
+   "value": 656,
+   "children": [
+    {"name": "bin", "value": 300},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 40,
+     "children": [
+      {"name": "rubberband", "value": 40}
+     ]
+    },
+    {
+     "name": "lib",
+     "value": 252,
+     "children": [
+      {"name": "pkgconfig", "value": 4}
+     ]
+    }
+   ]
+  },
+  {
+   "name": "boost-python3",
+   "value": 19512,
+   "children": [
+    {"name": ".brew", "value": 4},
+    {"name": "lib", "value": 14504},
+    {
+     "name": "share",
+     "value": 4996,
+     "children": [
+      {
+       "name": "doc",
+       "value": 4996,
+       "children": [
+        {
+         "name": "boost-python3",
+         "value": 4996,
+         "children": [
+          {
+           "name": "images",
+           "value": 384,
+           "children": [
+            {"name": "callouts", "value": 180}
+           ]
+          },
+          {
+           "name": "html",
+           "value": 3568,
+           "children": [
+            {
+             "name": "tutorial",
+             "value": 232,
+             "children": [
+              {"name": "tutorial", "value": 216}
+             ]
+            },
+            {
+             "name": "images",
+             "value": 372,
+             "children": [
+              {"name": "callouts", "value": 180}
+             ]
+            },
+            {"name": "faq", "value": 148},
+            {
+             "name": "numpy",
+             "value": 904,
+             "children": [
+              {"name": "tutorial", "value": 80},
+              {
+               "name": "_sources",
+               "value": 64,
+               "children": [
+                {"name": "tutorial", "value": 28},
+                {"name": "reference", "value": 32}
+               ]
+              },
+              {"name": "_static", "value": 608},
+              {"name": "reference", "value": 124}
+             ]
+            },
+            {
+             "name": "reference",
+             "value": 1668,
+             "children": [
+              {"name": "embedding", "value": 8},
+              {"name": "function_invocation_and_creation", "value": 380},
+              {"name": "concepts", "value": 48},
+              {"name": "high_level_components", "value": 372},
+              {"name": "utility_and_infrastructure", "value": 96},
+              {"name": "to_from_python_type_conversion", "value": 92},
+              {"name": "topics", "value": 88},
+              {"name": "object_wrappers", "value": 228}
+             ]
+            },
+            {"name": "building", "value": 92}
+           ]
+          },
+          {
+           "name": "numpy",
+           "value": 408,
+           "children": [
+            {"name": "tutorial", "value": 28},
+            {"name": "_templates", "value": 8},
+            {"name": "_static", "value": 68},
+            {
+             "name": "_build",
+             "value": 240,
+             "children": [
+              {
+               "name": "doctrees",
+               "value": 240,
+               "children": [
+                {"name": "tutorial", "value": 68},
+                {"name": "reference", "value": 148}
+               ]
+              }
+             ]
+            },
+            {"name": "reference", "value": 32}
+           ]
+          },
+          {"name": "reference", "value": 392}
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "lame",
+   "value": 2228,
+   "children": [
+    {"name": "bin", "value": 324},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 52,
+     "children": [
+      {"name": "lame", "value": 52}
+     ]
+    },
+    {"name": "lib", "value": 608},
+    {
+     "name": "share",
+     "value": 292,
+     "children": [
+      {
+       "name": "man",
+       "value": 28,
+       "children": [
+        {"name": "man1", "value": 28}
+       ]
+      },
+      {
+       "name": "doc",
+       "value": 264,
+       "children": [
+        {
+         "name": "lame",
+         "value": 264,
+         "children": [
+          {"name": "html", "value": 264}
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "pkg-config",
+   "value": 652,
+   "children": [
+    {"name": "bin", "value": 496},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "share",
+     "value": 56,
+     "children": [
+      {
+       "name": "man",
+       "value": 24,
+       "children": [
+        {"name": "man1", "value": 24}
+       ]
+      },
+      {"name": "aclocal", "value": 12},
+      {
+       "name": "doc",
+       "value": 20,
+       "children": [
+        {"name": "pkg-config", "value": 20}
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "libheif",
+   "value": 2268,
+   "children": [
+    {"name": "bin", "value": 184},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 88,
+     "children": [
+      {"name": "libheif", "value": 88}
+     ]
+    },
+    {
+     "name": "lib",
+     "value": 1224,
+     "children": [
+      {"name": "pkgconfig", "value": 4}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 712,
+     "children": [
+      {"name": "libheif", "value": 704},
+      {"name": "thumbnailers", "value": 4},
+      {
+       "name": "mime",
+       "value": 4,
+       "children": [
+        {"name": "packages", "value": 4}
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "libtiff",
+   "value": 4068,
+   "children": [
+    {"name": "bin", "value": 556},
+    {"name": ".brew", "value": 4},
+    {"name": "include", "value": 76},
+    {
+     "name": "lib",
+     "value": 1012,
+     "children": [
+      {"name": "pkgconfig", "value": 4}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 2092,
+     "children": [
+      {
+       "name": "man",
+       "value": 380,
+       "children": [
+        {"name": "man3", "value": 252},
+        {"name": "man1", "value": 128}
+       ]
+      },
+      {
+       "name": "doc",
+       "value": 1712,
+       "children": [
+        {
+         "name": "tiff-4.0.10",
+         "value": 1712,
+         "children": [
+          {
+           "name": "html",
+           "value": 1380,
+           "children": [
+            {"name": "man", "value": 584},
+            {"name": "images", "value": 208}
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "libtool",
+   "value": 3884,
+   "children": [
+    {"name": "bin", "value": 488},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 24,
+     "children": [
+      {"name": "libltdl", "value": 16}
+     ]
+    },
+    {"name": "lib", "value": 84},
+    {
+     "name": "share",
+     "value": 2044,
+     "children": [
+      {
+       "name": "man",
+       "value": 8,
+       "children": [
+        {"name": "man1", "value": 8}
+       ]
+      },
+      {
+       "name": "libtool",
+       "value": 1296,
+       "children": [
+        {"name": "build-aux", "value": 456},
+        {"name": "libltdl", "value": 48},
+        {"name": "loaders", "value": 72}
+       ]
+      },
+      {"name": "aclocal", "value": 372},
+      {"name": "info", "value": 368}
+     ]
+    }
+   ]
+  },
+  {
+   "name": "gmp2",
+   "value": 3208,
+   "children": [
+    {"name": ".brew", "value": 4},
+    {"name": "include", "value": 200},
+    {"name": "lib", "value": 1296},
+    {
+     "name": "share",
+     "value": 516,
+     "children": [
+      {"name": "info", "value": 516}
+     ]
+    }
+   ]
+  },
+  {"name": "gmp", "value": 3208},
+  {
+   "name": "wget",
+   "value": 4136,
+   "children": [
+    {"name": "bin", "value": 460},
+    {"name": ".brew", "value": 4},
+    {
+     "name": ".bottle",
+     "value": 8,
+     "children": [
+      {"name": "etc", "value": 8}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 2736,
+     "children": [
+      {
+       "name": "man",
+       "value": 112,
+       "children": [
+        {"name": "man1", "value": 112}
+       ]
+      },
+      {
+       "name": "locale",
+       "value": 2396,
+       "children": [
+        {
+         "name": "sl",
+         "value": 24,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 24}
+         ]
+        },
+        {
+         "name": "sk",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "pl",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "vi",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "sv",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "ga",
+         "value": 76,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 76}
+         ]
+        },
+        {
+         "name": "he",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "be",
+         "value": 24,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 24}
+         ]
+        },
+        {
+         "name": "da",
+         "value": 24,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 24}
+         ]
+        },
+        {
+         "name": "pt_BR",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "ja",
+         "value": 92,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 92}
+         ]
+        },
+        {
+         "name": "el",
+         "value": 12,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 12}
+         ]
+        },
+        {
+         "name": "it",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "ca",
+         "value": 40,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 40}
+         ]
+        },
+        {
+         "name": "zh_TW",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "cs",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "ru",
+         "value": 104,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 104}
+         ]
+        },
+        {
+         "name": "ro",
+         "value": 12,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 12}
+         ]
+        },
+        {
+         "name": "zh_CN",
+         "value": 76,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 76}
+         ]
+        },
+        {
+         "name": "pt",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "uk",
+         "value": 104,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 104}
+         ]
+        },
+        {
+         "name": "sr",
+         "value": 96,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 96}
+         ]
+        },
+        {
+         "name": "en_GB",
+         "value": 12,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 12}
+         ]
+        },
+        {
+         "name": "gl",
+         "value": 24,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 24}
+         ]
+        },
+        {
+         "name": "hr",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "hu",
+         "value": 84,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 84}
+         ]
+        },
+        {
+         "name": "nl",
+         "value": 64,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 64}
+         ]
+        },
+        {
+         "name": "bg",
+         "value": 12,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 12}
+         ]
+        },
+        {
+         "name": "nb",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "de",
+         "value": 88,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 88}
+         ]
+        },
+        {
+         "name": "fi",
+         "value": 64,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 64}
+         ]
+        },
+        {
+         "name": "eo",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "id",
+         "value": 36,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 36}
+         ]
+        },
+        {
+         "name": "fr",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "es",
+         "value": 72,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 72}
+         ]
+        },
+        {
+         "name": "et",
+         "value": 80,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 80}
+         ]
+        },
+        {
+         "name": "lt",
+         "value": 16,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 16}
+         ]
+        },
+        {
+         "name": "eu",
+         "value": 12,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 12}
+         ]
+        },
+        {
+         "name": "tr",
+         "value": 76,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 76}
+         ]
+        }
+       ]
+      },
+      {"name": "info", "value": 228}
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ffmpeg",
+   "value": 56824,
+   "children": [
+    {"name": "bin", "value": 1352},
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 1256,
+     "children": [
+      {"name": "libpostproc", "value": 8},
+      {"name": "libavfilter", "value": 64},
+      {"name": "libavutil", "value": 644},
+      {"name": "libavdevice", "value": 24},
+      {"name": "libavformat", "value": 156},
+      {"name": "libswscale", "value": 16},
+      {"name": "libavcodec", "value": 288},
+      {"name": "libavresample", "value": 28},
+      {"name": "libswresample", "value": 28}
+     ]
+    },
+    {
+     "name": "lib",
+     "value": 42828,
+     "children": [
+      {"name": "pkgconfig", "value": 36}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 11292,
+     "children": [
+      {
+       "name": "man",
+       "value": 4792,
+       "children": [
+        {"name": "man3", "value": 56},
+        {"name": "man1", "value": 4736}
+       ]
+      },
+      {
+       "name": "ffmpeg",
+       "value": 316,
+       "children": [
+        {"name": "examples", "value": 272}
+       ]
+      },
+      {
+       "name": "doc",
+       "value": 6184,
+       "children": [
+        {"name": "ffmpeg", "value": 6184}
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "libidn2",
+   "value": 880,
+   "children": [
+    {"name": "bin", "value": 64},
+    {"name": ".brew", "value": 4},
+    {"name": "include", "value": 16},
+    {
+     "name": "lib",
+     "value": 272,
+     "children": [
+      {"name": "pkgconfig", "value": 4}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 408,
+     "children": [
+      {
+       "name": "man",
+       "value": 80,
+       "children": [
+        {"name": "man3", "value": 76},
+        {"name": "man1", "value": 4}
+       ]
+      },
+      {
+       "name": "locale",
+       "value": 136,
+       "children": [
+        {
+         "name": "pl",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "vi",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "sv",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "da",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "pt_BR",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "ja",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "it",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "cs",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "fur",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "ru",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "ro",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "zh_CN",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "uk",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "sr",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "hr",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "hu",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "nl",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "de",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "fi",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "eo",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "id",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        },
+        {
+         "name": "fr",
+         "value": 8,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 8}
+         ]
+        },
+        {
+         "name": "es",
+         "value": 4,
+         "children": [
+          {"name": "LC_MESSAGES", "value": 4}
+         ]
+        }
+       ]
+      },
+      {
+       "name": "gtk-doc",
+       "value": 152,
+       "children": [
+        {
+         "name": "html",
+         "value": 152,
+         "children": [
+          {"name": "libidn2", "value": 152}
+         ]
+        }
+       ]
+      },
+      {"name": "info", "value": 40}
+     ]
+    }
+   ]
+  },
+  {
+   "name": "xvid",
+   "value": 1296,
+   "children": [
+    {"name": ".brew", "value": 4},
+    {"name": "include", "value": 36},
+    {"name": "lib", "value": 1004}
+   ]
+  },
+  {
+   "name": "ilmbase",
+   "value": 6452,
+   "children": [
+    {"name": ".brew", "value": 4},
+    {
+     "name": "include",
+     "value": 644,
+     "children": [
+      {"name": "OpenEXR", "value": 644}
+     ]
+    },
+    {
+     "name": "lib",
+     "value": 928,
+     "children": [
+      {"name": "pkgconfig", "value": 4}
+     ]
+    },
+    {
+     "name": "share",
+     "value": 4840,
+     "children": [
+      {
+       "name": "ilmbase",
+       "value": 4840,
+       "children": [
+        {
+         "name": "IexMath",
+         "value": 172,
+         "children": [
+          {"name": ".libs", "value": 52}
+         ]
+        },
+        {
+         "name": "IlmThread",
+         "value": 388,
+         "children": [
+          {"name": ".libs", "value": 132}
+         ]
+        },
+        {
+         "name": "Imath",
+         "value": 892,
+         "children": [
+          {"name": ".libs", "value": 184}
+         ]
+        },
+        {"name": "ImathTest", "value": 452},
+        {"name": "IexTest", "value": 84},
+        {
+         "name": "Half",
+         "value": 2208,
+         "children": [
+          {"name": ".libs", "value": 804}
+         ]
+        },
+        {"name": "HalfTest", "value": 156},
+        {
+         "name": "Iex",
+         "value": 488,
+         "children": [
+          {"name": ".libs", "value": 252}
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "python@2",
+   "value": 60940,
+   "children": [
+    {
+     "name": "IDLE.app",
+     "value": 188,
+     "children": [
+      {
+       "name": "Contents",
+       "value": 188,
+       "children": [
+        {"name": "MacOS", "value": 4},
+        {"name": "Resources", "value": 176}
+       ]
+      }
+     ]
+    },
+    {"name": "bin", "value": 24},
+    {"name": ".brew", "value": 16},
+    {
+     "name": "libexec",
+     "value": 16448,
+     "children": [
+      {
+       "name": "wheel",
+       "value": 216,
+       "children": [
+        {
+         "name": "wheel",
+         "value": 80,
+         "children": [
+          {"name": "cli", "value": 24}
+         ]
+        },
+        {"name": "wheel.egg-info", "value": 28},
+        {
+         "name": "build",
+         "value": 80,
+         "children": [
+          {
+           "name": "lib",
+           "value": 80,
+           "children": [
+            {
+             "name": "wheel",
+             "value": 80,
+             "children": [
+              {"name": "cli", "value": 24}
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "pip",
+       "value": 10300,
+       "children": [
+        {
+         "name": "docs",
+         "value": 252,
+         "children": [
+          {
+           "name": "man",
+           "value": 52,
+           "children": [
+            {"name": "commands", "value": 48}
+           ]
+          },
+          {
+           "name": "html",
+           "value": 196,
+           "children": [
+            {"name": "development", "value": 36},
+            {"name": "reference", "value": 92}
+           ]
+          }
+         ]
+        },
+        {
+         "name": "build",
+         "value": 4828,
+         "children": [
+          {
+           "name": "lib",
+           "value": 4828,
+           "children": [
+            {
+             "name": "pip",
+             "value": 4828,
+             "children": [
+              {
+               "name": "_internal",
+               "value": 756,
+               "children": [
+                {"name": "utils", "value": 140},
+                {"name": "models", "value": 24},
+                {"name": "cli", "value": 72},
+                {"name": "operations", "value": 40},
+                {"name": "req", "value": 108},
+                {"name": "vcs", "value": 52},
+                {"name": "commands", "value": 104}
+               ]
+              },
+              {
+               "name": "_vendor",
+               "value": 4064,
+               "children": [
+                {"name": "packaging", "value": 80},
+                {"name": "pytoml", "value": 32},
+                {"name": "msgpack", "value": 48},
+                {
+                 "name": "chardet",
+                 "value": 444,
+                 "children": [
+                  {"name": "cli", "value": 8}
+                 ]
+                },
+                {"name": "webencodings", "value": 44},
+                {"name": "progress", "value": 20},
+                {"name": "pep517", "value": 52},
+                {
+                 "name": "distlib",
+                 "value": 936,
+                 "children": [
+                  {"name": "_backport", "value": 160}
+                 ]
+                },
+                {"name": "colorama", "value": 40},
+                {"name": "lockfile", "value": 40},
+                {
+                 "name": "cachecontrol",
+                 "value": 76,
+                 "children": [
+                  {"name": "caches", "value": 16}
+                 ]
+                },
+                {"name": "idna", "value": 268},
+                {"name": "requests", "value": 212},
+                {
+                 "name": "html5lib",
+                 "value": 548,
+                 "children": [
+                  {"name": "filters", "value": 60},
+                  {"name": "treewalkers", "value": 40},
+                  {"name": "treebuilders", "value": 64},
+                  {"name": "_trie", "value": 16},
+                  {"name": "treeadapters", "value": 12}
+                 ]
+                },
+                {"name": "certifi", "value": 284},
+                {
+                 "name": "urllib3",
+                 "value": 392,
+                 "children": [
+                  {"name": "util", "value": 84},
+                  {
+                   "name": "contrib",
+                   "value": 112,
+                   "children": [
+                    {"name": "_securetransport", "value": 32}
+                   ]
+                  },
+                  {
+                   "name": "packages",
+                   "value": 52,
+                   "children": [
+                    {"name": "backports", "value": 4},
+                    {"name": "ssl_match_hostname", "value": 12}
+                   ]
+                  }
+                 ]
+                },
+                {"name": "pkg_resources", "value": 108}
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "name": "src",
+         "value": 5036,
+         "children": [
+          {"name": "pip.egg-info", "value": 36},
+          {
+           "name": "pip",
+           "value": 5000,
+           "children": [
+            {
+             "name": "_internal",
+             "value": 756,
+             "children": [
+              {"name": "utils", "value": 140},
+              {"name": "models", "value": 24},
+              {"name": "cli", "value": 72},
+              {"name": "operations", "value": 40},
+              {"name": "req", "value": 108},
+              {"name": "vcs", "value": 52},
+              {"name": "commands", "value": 104}
+             ]
+            },
+            {
+             "name": "_vendor",
+             "value": 4236,
+             "children": [
+              {"name": "packaging", "value": 100},
+              {"name": "pytoml", "value": 36},
+              {"name": "msgpack", "value": 52},
+              {
+               "name": "chardet",
+               "value": 472,
+               "children": [
+                {"name": "cli", "value": 8}
+               ]
+              },
+              {"name": "webencodings", "value": 48},
+              {"name": "progress", "value": 24},
+              {"name": "pep517", "value": 56},
+              {
+               "name": "distlib",
+               "value": 952,
+               "children": [
+                {"name": "_backport", "value": 160}
+               ]
+              },
+              {"name": "colorama", "value": 44},
+              {"name": "lockfile", "value": 44},
+              {
+               "name": "cachecontrol",
+               "value": 80,
+               "children": [
+                {"name": "caches", "value": 16}
+               ]
+              },
+              {"name": "idna", "value": 272},
+              {"name": "requests", "value": 216},
+              {
+               "name": "html5lib",
+               "value": 552,
+               "children": [
+                {"name": "filters", "value": 60},
+                {"name": "treewalkers", "value": 40},
+                {"name": "treebuilders", "value": 64},
+                {"name": "_trie", "value": 16},
+                {"name": "treeadapters", "value": 12}
+               ]
+              },
+              {"name": "certifi", "value": 288},
+              {
+               "name": "urllib3",
+               "value": 396,
+               "children": [
+                {"name": "util", "value": 84},
+                {
+                 "name": "contrib",
+                 "value": 112,
+                 "children": [
+                  {"name": "_securetransport", "value": 32}
+                 ]
+                },
+                {
+                 "name": "packages",
+                 "value": 52,
+                 "children": [
+                  {"name": "backports", "value": 4},
+                  {"name": "ssl_match_hostname", "value": 12}
+                 ]
+                }
+               ]
+              },
+              {"name": "pkg_resources", "value": 112}
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "name": "setuptools",
+       "value": 5932,
+       "children": [
+        {"name": "setuptools.egg-info", "value": 32},
+        {"name": "tests", "value": 4},
+        {
+         "name": "docs",
+         "value": 372,
+         "children": [
+          {"name": "_templates", "value": 4},
+          {
+           "name": "_theme",
+           "value": 12,
+           "children": [
+            {
+             "name": "nature",
+             "value": 12,
+             "children": [
+              {"name": "static", "value": 8}
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "name": "build",
+         "value": 1844,
+         "children": [
+          {
+           "name": "lib",
+           "value": 1844,
+           "children": [
+            {
+             "name": "setuptools",
+             "value": 1356,
+             "children": [
+              {
+               "name": "_vendor",
+               "value": 340,
+               "children": [
+                {"name": "packaging", "value": 80}
+               ]
+              },
+              {"name": "command", "value": 288},
+              {"name": "extern", "value": 4}
+             ]
+            },
+            {
+             "name": "pkg_resources",
+             "value": 484,
+             "children": [
+              {
+               "name": "_vendor",
+               "value": 368,
+               "children": [
+                {"name": "packaging", "value": 80}
+               ]
+              },
+              {"name": "extern", "value": 4}
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        {
+         "name": "setuptools",
+         "value": 2364,
+         "children": [
+          {
+           "name": "_vendor",
+           "value": 452,
+           "children": [
+            {"name": "packaging", "value": 148}
+           ]
+          },
+          {
+           "name": "tests",
+           "value": 380,
+           "children": [
+            {
+             "name": "indexes",
+             "value": 8,
+             "children": [
+              {
+               "name": "test_links_priority",
+               "value": 8,
+               "children": [
+                {
+                 "name": "simple",
+                 "value": 4,
+                 "children": [
+                  {"name": "foobar", "value": 4}
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          },
+          {"name": "command", "value": 492},
+          {"name": "extern", "value": 8}
+         ]
+        },
+        {
+         "name": "pkg_resources",
+         "value": 1088,
+         "children": [
+          {
+           "name": "_vendor",
+           "value": 764,
+           "children": [
+            {"name": "packaging", "value": 168}
+           ]
+          },
+          {"name": "tests", "value": 64},
+          {"name": "extern", "value": 8}
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    {"name": "Python", "value": 48}
+   ]
+  }
+ ]
+}
