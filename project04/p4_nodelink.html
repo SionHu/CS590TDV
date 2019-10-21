@@ -65,13 +65,21 @@
       </div>
 </svg>
 
+<svg width="1460" height="1600" id="radial_tree"></svg>
+
 <!-- load the d3.js library -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
 <script>
 
 function horizontal(){
-d3.select("svg").remove();
+
+d3.select("#radial_tree")
+  .attr("height", 0)
+
+d3.select("#horizontal_tree").style("opacity", 1);
+d3.select("#slider").style("opacity", 1);
+
 d3.json("filesystem_new.json", function(error, treeData){
 
   // Set the dimensions and margins of the diagram
@@ -83,6 +91,7 @@ d3.json("filesystem_new.json", function(error, treeData){
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
   var svg = d3.select("body").append("svg")
+      .attr("id","horizontal_tree")
       .attr("width", width + margin.right + margin.left)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -123,6 +132,7 @@ d3.json("filesystem_new.json", function(error, treeData){
       update(root)
     });
 
+if (d3.select('#slider') == true) {
   d3.select('#slider')
     .append('svg')
     .attr('width', width+100)
@@ -130,6 +140,15 @@ d3.json("filesystem_new.json", function(error, treeData){
     .append('g')
     .attr('transform', 'translate(80,30)')
     .call(slider);
+}else{
+  d3.select('#slider').select('svg')
+  .attr('width', width+100)
+  .attr('height', 80)
+  .append('g')
+  .attr('transform', 'translate(80,30)')
+  .call(slider);
+}
+
 
   // declares a tree layout and assigns the size
   var treemap = d3.tree().size([height, width]);
@@ -140,7 +159,7 @@ d3.json("filesystem_new.json", function(error, treeData){
     dom.push(Math.pow(4, i))
   };
   dom[0] = 0;
-  console.log(dom);
+  // console.log(dom);
   var range = ["#fffac8","#ffd8b1","#fabebe","#ffe119","#f58231","#e6194B","#808000","9A6324"];
 
   function fill_color(value){
@@ -310,15 +329,20 @@ d3.json("filesystem_new.json", function(error, treeData){
 }
 
 function radial(){
-  d3.select("svg").remove();
+  d3.select("#horizontal_tree").style("opacity", 0);
+  d3.select("#slider").style("opacity", 0);
 
+  d3.select("#radial_tree")
+    .attr("height", 1600)
+
+  document.getElementById("instruction").style.display="none";
   var width = 960;
   var height = 1060;
 
-  var svg = d3.select("svg"),
+  var svg = d3.select("#radial_tree")
       width = +svg.attr("width"),
       height = +svg.attr("height"),
-      radius = 1000,
+      radius = 900,
       g = svg.append("g").attr("transform", "translate(" + (width / 2 + 40) + "," + (height / 2 + 90) + ")");
 
   var stratify = d3.stratify()
