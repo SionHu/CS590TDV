@@ -31,11 +31,47 @@
     <b style="color: red; font-family:georgia">Please choose a depth on the slider to begin</b>
 </div>
 
+<svg width="2060" height="30">
+    <g>
+      <circle cx="80" cy="10" r="10" style="fill: #fffac8"/>
+      <circle cx="180" cy="10" r="10" style="fill: #ffd8b1"/>
+      <circle cx="280" cy="10" r="10" style="fill: #fabebe"/>
+      <circle cx="380" cy="10" r="10" style="fill: #ffe119"/>
+      <circle cx="480" cy="10" r="10" style="fill: #f58231"/>
+      <circle cx="600" cy="10" r="10" style="fill: #e6194B"/>
+      <circle cx="720" cy="10" r="10" style="fill: #808000"/>
+      <circle cx="850" cy="10" r="10" style="fill: #9A6324"/>
+    </g>
+      <g><text x=950 y="15">(Unit: megabytes)<text></g>
+      <g><text x="100" y="15">0 ~ 4<text></g>
+      <g><text x="200" y="15">4 ~ 16<text></g>
+      <g><text x="300" y="15">16 ~ 64<text></g>
+      <g><text x="400" y="15">64 ~ 256<text></g>
+      <g><text x="500" y="15">256 ~ 1024<text></g>
+      <g><text x="620" y="15">1024 ~ 4096<text></g>
+      <g><text x="740" y="15">4096 ~ 16384<text></g>
+      <g><text x="870" y="15">> 16384<text></g>
+
+      <div id="option" style="margin-left: 80px;">
+          <input name="horizontal"
+                 type="button"
+                 value="Horizontal"
+                 onclick="horizontal()" />
+
+           <input name="radial"
+                  type="button"
+                  value="Radial"
+                  onclick="radial()" />
+      </div>
+</svg>
+
 <!-- load the d3.js library -->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
 <script>
 
+function horizontal(){
+d3.select("svg").remove();
 d3.json("filesystem_new.json", function(error, treeData){
 
   // Set the dimensions and margins of the diagram
@@ -56,9 +92,6 @@ d3.json("filesystem_new.json", function(error, treeData){
   var i = 0,
       duration = 750,
       root;
-
-  var instruction = d3.select('#instruction')
-    .attr("text", "lol")
 
   // slider for decide collapse level
   var slider = d3
@@ -107,6 +140,7 @@ d3.json("filesystem_new.json", function(error, treeData){
     dom.push(Math.pow(4, i))
   };
   dom[0] = 0;
+  console.log(dom);
   var range = ["#fffac8","#ffd8b1","#fabebe","#ffe119","#f58231","#e6194B","#808000","9A6324"];
 
   function fill_color(value){
@@ -267,11 +301,71 @@ d3.json("filesystem_new.json", function(error, treeData){
       update(d);
     };
 
-  // add legend for the color coding
+
 
   }; // End of script
 
 }); // End of data reader
 
+}
+
+function radial(){
+  d3.select("svg").remove();
+
+  var width = 960;
+  var height = 1060;
+
+  var svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height"),
+      radius = 1000,
+      g = svg.append("g").attr("transform", "translate(" + (width / 2 + 40) + "," + (height / 2 + 90) + ")");
+
+  var stratify = d3.stratify()
+      .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+
+  var tree = d3.tree()
+      .size([2 * Math.PI, radius])
+      .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+
+  d3.json("filesystem_new.json", function(error, data) {
+    if (error) throw error;
+
+    var root = tree(d3.hierarchy(data));
+
+    var link = g.selectAll(".link")
+      .data(root.links())
+      .enter().append("path")
+        .attr("class", "link")
+        .attr("d", d3.linkRadial()
+            .angle(function(d) { return d.x; })
+            .radius(function(d) { return d.y; }));
+
+    var node = g.selectAll(".node")
+      .data(root.descendants())
+      .enter().append("g")
+        .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+        .attr("transform", function(d) { return "translate(" + radialPoint(d.x, d.y) + ")"; })
+        .on("mouseover", function() {
+          d3.select(this).classed("active", true);
+        }).on("mouseout", function() {
+          d3.select(this).classed("active", false);
+        });
+
+    node.append("text")
+        .attr("dy", "0.31em")
+        .attr("x", function(d) { return d.x < Math.PI === !d.children ? 6 : -6; })
+        .attr("text-anchor", function(d) { return d.x < Math.PI === !d.children ? "start" : "end"; })
+        .attr("transform", function(d) { return "rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"; })
+        .text(function(d) { return d.data.name; });
+  });
+
+  function radialPoint(x, y) {
+    return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
+  }
+
+}
+
 </script>
+
 </body>
