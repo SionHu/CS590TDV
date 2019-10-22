@@ -1,0 +1,23 @@
+* Discussion *
+
+There are 4 different tree representations used in this project: horizontal tree
+, radial tree, layered tree, and tree map. Horizontal or vertical tree is the
+most direct and traditional tree data representation. It clearly shows the
+connection between the parent nodes and children nodes with leveled positions.
+However, when there are many layers in the tree with only a few nodes attached,
+this way of presenting makes it hard for the audience to trace back the parent
+nodes in the upper levels, and also stretches the graph. Radio tree makes the
+whole graph clear in one circle and it's easy to directly look at all nodes in one
+glance. But it's harder to trace the parent of the node since all links are
+twisted in some way to fit into the figure. Layered tree representation clearly
+shows the proportion or value of each node, but makes it harder to see the when
+there are many children nodes belong to one parent. At last, tree map shows
+proportion of the nodes in a direct way, but makes the children nodes relatively
+small when there are a lot of them.
+
+From my perspective, the traditional horizontal or vertical tree representation
+is the best way of presenting the relationships in the data. The collapse
+interaction makes it easy to understand the files at each layer without being
+distrubed by crowded links and nodes. It's also easy to find the flow of nodes
+this way, which, I believe, is an important aspect of the data representation when
+trying to visualize it into a tree. 

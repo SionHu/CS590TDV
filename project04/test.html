@@ -1,91 +1,168 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-<style>
+<head>
+    <style>
+        body {
+            font-family: Sans-serif;
+            font-size: 11px;
+        }
 
-.node text {
-   font: 12px sans-serif;
-}
+        .slice {
+            cursor: pointer;
+        }
 
-.node.active text {
-  font-weight: bold;
-}
+        .slice .main-arc {
+            stroke: #fff;
+            stroke-width: 1px;
+        }
 
-.node--internal text {
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
-}
+        .slice .hidden-arc {
+            fill: none;
+        }
 
-.link {
-  fill: none;
-  stroke: #555;
-  stroke-opacity: 0.4;
-  stroke-width: 1.5px;
-}
+        .slice text {
+            pointer-events: none;
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+    </style>
 
-g.node {
-  cursor: pointer;
-}
+    <script src='https://d3js.org/d3.v4.min.js'></script>
+</head>
+<body>
+    <script>
+        const width = window.innerWidth,
+            height = window.innerHeight,
+            maxRadius = (Math.min(width, height) / 2) - 5;
 
-text {
-  font-family: FontAwesome;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+        const formatNumber = d3.format(',d');
 
-</style>
-<svg width="1460" height="1600"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
+        const x = d3.scaleLinear()
+            .range([0, 2 * Math.PI])
+            .clamp(true);
 
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height"),
-    radius = 900,
-    g = svg.append("g").attr("transform", "translate(" + (width / 2 + 40) + "," + (height / 2 + 90) + ")");
+        const y = d3.scaleSqrt()
+            .range([maxRadius*.1, maxRadius]);
 
-var stratify = d3.stratify()
-    .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+        const color = d3.scaleOrdinal(d3.schemeCategory20);
 
-var tree = d3.tree()
-    .size([2 * Math.PI, radius])
-    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+        const partition = d3.partition();
 
-d3.json("filesystem_new.json", function(error, data) {
-  if (error) throw error;
+        const arc = d3.arc()
+            .startAngle(d => x(d.x0))
+            .endAngle(d => x(d.x1))
+            .innerRadius(d => Math.max(0, y(d.y0)))
+            .outerRadius(d => Math.max(0, y(d.y1)));
 
-  var root = tree(d3.hierarchy(data));
+        const middleArcLine = d => {
+            const halfPi = Math.PI/2;
+            const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
+            const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
 
-  var link = g.selectAll(".link")
-    .data(root.links())
-    .enter().append("path")
-      .attr("class", "link")
-      .attr("d", d3.linkRadial()
-          .angle(function(d) { return d.x; })
-          .radius(function(d) { return d.y; }));
+            const middleAngle = (angles[1] + angles[0]) / 2;
+            const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
+            if (invertDirection) { angles.reverse(); }
 
-  var node = g.selectAll(".node")
-    .data(root.descendants())
-    .enter().append("g")
-      .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
-      .attr("transform", function(d) { return "translate(" + radialPoint(d.x, d.y) + ")"; })
-      .on("mouseover", function() {
-        d3.select(this).classed("active", true);
-      }).on("mouseout", function() {
-        d3.select(this).classed("active", false);
-      });
+            const path = d3.path();
+            path.arc(0, 0, r, angles[0], angles[1], invertDirection);
+            return path.toString();
+        };
 
-  node.append("text")
-      .attr("dy", "0.31em")
-      .attr("x", function(d) { return d.x < Math.PI === !d.children ? 6 : -6; })
-      .attr("text-anchor", function(d) { return d.x < Math.PI === !d.children ? "start" : "end"; })
-      .attr("transform", function(d) { return "rotate(" + (d.x < Math.PI ? d.x - Math.PI / 2 : d.x + Math.PI / 2) * 180 / Math.PI + ")"; })
-      .text(function(d) { return d.data.name; });
-});
+        const textFits = d => {
+            const CHAR_SPACE = 6;
 
-function radialPoint(x, y) {
-  return [(y = +y) * Math.cos(x -= Math.PI / 2), y * Math.sin(x)];
-}
+            const deltaAngle = x(d.x1) - x(d.x0);
+            const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+            const perimeter = r * deltaAngle;
 
-</script>
+            return d.data.name.length * CHAR_SPACE < perimeter;
+        };
+
+        const svg = d3.select('body').append('svg')
+            .style('width', '100vw')
+            .style('height', '100vh')
+            .attr('viewBox', `${-width / 2} ${-height / 2} ${width} ${height}`)
+            .on('click', () => focusOn()); // Reset zoom on canvas click
+
+        d3.json('filesystem_new.json', (error, root) => {
+            if (error) throw error;
+
+            root = d3.hierarchy(root);
+            root.sum(d => d.value);
+
+            const slice = svg.selectAll('g.slice')
+                .data(partition(root).descendants());
+
+            slice.exit().remove();
+
+            const newSlice = slice.enter()
+                .append('g').attr('class', 'slice')
+                .on('click', d => {
+                    d3.event.stopPropagation();
+                    focusOn(d);
+                });
+
+            newSlice.append('title')
+                .text(d => d.data.name + '\n' + formatNumber(d.value));
+
+            newSlice.append('path')
+                .attr('class', 'main-arc')
+                .style('fill', d => color((d.children ? d : d.parent).data.name))
+                .attr('d', arc);
+
+            newSlice.append('path')
+                .attr('class', 'hidden-arc')
+                .attr('id', (_, i) => `hiddenArc${i}`)
+                .attr('d', middleArcLine);
+
+            const text = newSlice.append('text')
+                .attr('display', d => textFits(d) ? null : 'none');
+
+            // Add white contour
+            text.append('textPath')
+                .attr('startOffset','50%')
+                .attr('xlink:href', (_, i) => `#hiddenArc${i}` )
+                .text(d => d.data.name)
+                .style('fill', 'none')
+                .style('stroke', '#fff')
+                .style('stroke-width', 5)
+                .style('stroke-linejoin', 'round');
+
+            text.append('textPath')
+                .attr('startOffset','50%')
+                .attr('xlink:href', (_, i) => `#hiddenArc${i}` )
+                .text(d => d.data.name);
+        });
+
+        function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
+            // Reset to top-level if no data point specified
+
+            const transition = svg.transition()
+                .duration(750)
+                .tween('scale', () => {
+                    const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
+                        yd = d3.interpolate(y.domain(), [d.y0, 1]);
+                    return t => { x.domain(xd(t)); y.domain(yd(t)); };
+                });
+
+            transition.selectAll('path.main-arc')
+                .attrTween('d', d => () => arc(d));
+
+            transition.selectAll('path.hidden-arc')
+                .attrTween('d', d => () => middleArcLine(d));
+
+            transition.selectAll('text')
+                .attrTween('display', d => () => textFits(d) ? null : 'none');
+
+            moveStackToFront(d);
+
+            //
+
+            function moveStackToFront(elD) {
+                svg.selectAll('.slice').filter(d => d === elD)
+                    .each(function(d) {
+                        this.parentNode.appendChild(this);
+                        if (d.parent) { moveStackToFront(d.parent); }
+                    })
+            }
+        }
+    </script>
+</body>
