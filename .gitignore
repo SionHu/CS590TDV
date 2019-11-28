@@ -30,3 +30,7 @@ someOtherfoler/
 # The good-old Mac file #
 #########################
 .DS_Store
+
+# Configuration Environment #
+mysite/
+
